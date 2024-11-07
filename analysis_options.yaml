@@ -1,0 +1,14 @@
+# include: package:flutter_lints/flutter.yaml
+include: package:surf_lint_rules/analysis_options.yaml
+
+linter:
+  rules:
+    # avoid_print: false 
+
+analyzer:
+  errors:
+    todo: ignore
+    avoid_redundant_argument_values: ignore
+    sort_pub_dependencies: ignore
+    invalid_annotation_target: ignore # freezed code generation
+    cascade_invocations: ignore # isar code generation

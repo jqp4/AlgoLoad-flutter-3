@@ -1,0 +1,4 @@
+enum ButtonColorScheme {
+  blue,
+  white,
+}

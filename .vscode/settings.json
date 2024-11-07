@@ -1,0 +1,17 @@
+{
+    "dart.lineLength": 125,
+
+    // _barrel files
+    "dartBarrelFileGenerator.defaultBarrelName": "_barrel",
+    "dartBarrelFileGenerator.skipEmpty": false,
+    "dartBarrelFileGenerator.excludeFileList": [
+        "**/*.g.dart",
+        "**/*.gr.dart",
+        "**/*.gen.dart",
+        "**/*.part.dart",
+        "**/*.config.dart",
+        "**/*_ignore.dart",
+        "**/*_event.dart",
+        "**/*_state.dart"
+    ]
+}
