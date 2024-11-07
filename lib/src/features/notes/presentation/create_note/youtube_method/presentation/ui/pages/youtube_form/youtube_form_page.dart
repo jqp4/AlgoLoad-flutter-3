@@ -34,14 +34,6 @@ class _YoutubeFormPageState extends State<YoutubeFormPage> {
   Widget build(BuildContext context) {
     final backgroundColor = _theme.colorScheme.surface;
 
-    // todo: move
-    return const Scaffold(
-      body: SafeArea(
-        child: AudioRecorderExample1(),
-      ),
-    );
-
-    // ignore: dead_code
     return Material(
       color: backgroundColor,
       child: InkWell(

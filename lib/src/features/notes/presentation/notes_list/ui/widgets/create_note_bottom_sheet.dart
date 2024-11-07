@@ -31,7 +31,8 @@ class CreateNoteBottomSheet extends StatelessWidget {
           leadingIcon: Icons.mic_rounded,
           onPressed: () {
             context.router.popAndPush(
-              CreateNoteWithAudioRecordRoute(notesBloc: notesBloc),
+              // CreateNoteWithAudioRecordRoute(notesBloc: notesBloc),
+              const CreateNoteWithAudioRecordRoute(),
             );
           },
         ),

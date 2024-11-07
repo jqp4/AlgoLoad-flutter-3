@@ -58,18 +58,10 @@ class CreateNoteWithAudioFileRouteArgs {
 
 /// generated route for
 /// [CreateNoteWithAudioRecordPage]
-class CreateNoteWithAudioRecordRoute
-    extends PageRouteInfo<CreateNoteWithAudioRecordRouteArgs> {
-  CreateNoteWithAudioRecordRoute({
-    required NotesBloc notesBloc,
-    Key? key,
-    List<PageRouteInfo>? children,
-  }) : super(
+class CreateNoteWithAudioRecordRoute extends PageRouteInfo<void> {
+  const CreateNoteWithAudioRecordRoute({List<PageRouteInfo>? children})
+      : super(
           CreateNoteWithAudioRecordRoute.name,
-          args: CreateNoteWithAudioRecordRouteArgs(
-            notesBloc: notesBloc,
-            key: key,
-          ),
           initialChildren: children,
         );
 
@@ -78,29 +70,9 @@ class CreateNoteWithAudioRecordRoute
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<CreateNoteWithAudioRecordRouteArgs>();
-      return CreateNoteWithAudioRecordPage(
-        notesBloc: args.notesBloc,
-        key: args.key,
-      );
+      return const CreateNoteWithAudioRecordPage();
     },
   );
-}
-
-class CreateNoteWithAudioRecordRouteArgs {
-  const CreateNoteWithAudioRecordRouteArgs({
-    required this.notesBloc,
-    this.key,
-  });
-
-  final NotesBloc notesBloc;
-
-  final Key? key;
-
-  @override
-  String toString() {
-    return 'CreateNoteWithAudioRecordRouteArgs{notesBloc: $notesBloc, key: $key}';
-  }
 }
 
 /// generated route for

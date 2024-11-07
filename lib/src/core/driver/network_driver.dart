@@ -15,7 +15,7 @@ class NetworkDriver {
   final Dio dio;
 
   // TODO: move to env
-  static const String rootUrl = 'http://95.216.170.252:3001/';
+  static const String rootUrl = 'http://localhost:3001/';
 
   void init() {
     dio.options
@@ -27,10 +27,11 @@ class NetworkDriver {
       }
       ..headers = {
         HttpHeaders.userAgentHeader: 'dio',
+        HttpHeaders.contentTypeHeader: 'application/x-www-form-urlencoded',
       };
 
     // TODO: add real auth
-    // dio.interceptors.add(AuthInterceptor());
+    dio.interceptors.add(AuthInterceptor());
     dio.interceptors.add(InfoInterceptor());
   }
 
@@ -46,7 +47,7 @@ class NetworkDriver {
     Map<String, dynamic> body = const {},
   }) async {
     final rawData = <String, dynamic>{
-      'clientToken': await _getAccessToken(),
+      // 'clientToken': await _getAccessToken(),
     }..addAll(body);
 
     return dio.post(url, data: rawData);

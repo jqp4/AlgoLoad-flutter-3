@@ -6,14 +6,6 @@ class ServerException implements Exception {
   final String description;
 }
 
-class AudioRecorderException implements Exception {
-  const AudioRecorderException({
-    required this.description,
-  });
-
-  final String description;
-}
-
 class LocalException implements Exception {
   const LocalException({
     required this.description,

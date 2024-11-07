@@ -5,6 +5,7 @@ import 'package:logging/logging.dart';
 class AudioFilePicker {
   const AudioFilePicker();
 
+  // todo: change to xml
   // todo: add other extensions
   static const _allowedExtensions = ['mp3', 'aac', 'wav', 'mp4', 'm4a'];
 

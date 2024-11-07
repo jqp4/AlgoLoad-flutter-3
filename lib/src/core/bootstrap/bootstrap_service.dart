@@ -94,7 +94,6 @@ class BootstrapService {
 
   Future<void> _connectionStage() async {
     await configureNetworkDriver();
-    await configureFirebaseService();
   }
 
   // TODO:

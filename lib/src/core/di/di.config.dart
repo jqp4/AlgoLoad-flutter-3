@@ -18,8 +18,6 @@ import '../../features/notes/external/local_data_source.dart' as _i463;
 import '../../features/notes/external/remote_data_source.dart' as _i231;
 import '../../features/notes/infra/_barrel.dart' as _i470;
 import '../../features/notes/infra/repository/repository.dart' as _i197;
-import '../api/firebase/firebase_api.dart' as _i845;
-import '../api/firebase/firebase_service.dart' as _i932;
 import '../bootstrap/bootstrap_service.dart' as _i739;
 import '../driver/network_driver.dart' as _i342;
 import '../services/app_version_service.dart' as _i212;
@@ -52,12 +50,10 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i482.LocalNotesStorage(),
       dispose: (i) => i.dispose(),
     );
-    gh.singleton<_i932.FirebaseService>(() => const _i932.FirebaseService());
     gh.singleton<_i212.AppVersionService>(() => _i212.AppVersionService());
     gh.lazySingleton<_i492.LoadingOverlay>(() => _i492.LoadingOverlay());
     gh.lazySingleton<_i874.SecureStorageService>(
         () => _i874.SecureStorageService());
-    gh.lazySingleton<_i845.FirebaseApi>(() => _i845.FirebaseApi());
     gh.singleton<_i470.INoteRemoteDataSource>(
         () => const _i231.NoteRemoteDataSourceImpl());
     gh.singleton<_i470.INoteLocalDataSource>(
