@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
-import 'package:notes_app_with_ai/src/core/bootstrap/bootstrap_service.dart';
-import 'package:notes_app_with_ai/src/core/di/di.dart';
+import 'package:notes_app_with_ai/src/core/_barrel.dart';
 
 enum AppBuildType {
   development,
@@ -14,13 +12,13 @@ Future<void> bootstrap(
   Widget Function() appBuilder,
   AppBuildType appBuildType,
 ) async {
-  final log = Logger('bootstrap_root');
+  final log = MyWebLogger('bootstrap_root')..finest('start');
 
   await runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
 
-      await configureDependencies();
+      configureDependencies();
       await inject<BootstrapService>().init(appBuildType);
 
       runApp(appBuilder());

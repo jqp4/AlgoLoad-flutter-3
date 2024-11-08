@@ -1,5 +1,4 @@
 import 'package:injectable/injectable.dart';
-import 'package:logging/logging.dart';
 import 'package:notes_app_with_ai/src/core/_barrel.dart';
 import 'package:notes_app_with_ai/src/features/notes/domain/_barrel.dart';
 import 'package:notes_app_with_ai/src/features/notes/infra/_barrel.dart';
@@ -10,7 +9,7 @@ final class NoteRemoteDataSourceImpl implements INoteRemoteDataSource {
 
   @override
   Future<String> sendAudioFileTask(String audioFilePath, NoteLanguage language) async {
-    final log = Logger('NoteRemoteDataSource.sendAudioFileTask');
+    final log = MyWebLogger('NoteRemoteDataSource.sendAudioFileTask');
     final client = inject<NetworkDriver>();
     const fineStatusCode = 200;
 
@@ -42,7 +41,7 @@ final class NoteRemoteDataSourceImpl implements INoteRemoteDataSource {
 
   @override
   Future<String> sendYoutubeTask(String youtubeUrl, NoteLanguage language) async {
-    final log = Logger('NoteRemoteDataSource.sendYoutubeTask');
+    final log = MyWebLogger('NoteRemoteDataSource.sendYoutubeTask');
     final client = inject<NetworkDriver>();
     const fineStatusCode = 200;
 
@@ -74,7 +73,7 @@ final class NoteRemoteDataSourceImpl implements INoteRemoteDataSource {
 
   @override
   Future<NoteDto> getTaskResult(String taskId) async {
-    final log = Logger('NoteRemoteDataSource.getTaskResult');
+    final log = MyWebLogger('NoteRemoteDataSource.getTaskResult');
     final client = inject<NetworkDriver>();
     const fineStatusCode = 200;
 
@@ -105,7 +104,7 @@ final class NoteRemoteDataSourceImpl implements INoteRemoteDataSource {
 
   // Helper
   T _safetySerialization<T>(T Function() serialization) {
-    final log = Logger('NoteRemoteDataSource._safetySerialization');
+    final log = MyWebLogger('NoteRemoteDataSource._safetySerialization');
 
     try {
       return serialization();

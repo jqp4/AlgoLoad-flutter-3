@@ -1,6 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
-import 'package:logging/logging.dart';
+import 'package:notes_app_with_ai/src/core/_barrel.dart';
 
 class AudioFilePicker {
   const AudioFilePicker();
@@ -11,7 +11,7 @@ class AudioFilePicker {
 
   static List<String> get allowedExtensions => _allowedExtensions;
 
-  static final _log = Logger('AudioFilePicker');
+  static final _log = MyWebLogger('AudioFilePicker');
 
   Future<PlatformFile?> pickFile() async {
     PlatformFile? file;

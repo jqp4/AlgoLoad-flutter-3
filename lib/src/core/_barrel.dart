@@ -7,6 +7,7 @@ export 'env/_barrel.dart';
 export 'error/_barrel.dart';
 export 'file/_barrel.dart';
 export 'flavors/_barrel.dart';
+export 'logger/_barrel.dart';
 export 'router/_barrel.dart';
 export 'services/_barrel.dart';
 export 'storage/_barrel.dart';

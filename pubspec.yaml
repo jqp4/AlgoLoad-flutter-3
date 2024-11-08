@@ -6,9 +6,6 @@ version: 1.0.0+1
 environment:
   sdk: ^3.5.3
 
-dependency_overrides:
-  analyzer: ^6.7.0 # isar required
-
 dependencies:
   flutter:
     sdk: flutter
@@ -21,29 +18,26 @@ dependencies:
   dio: ^5.7.0
   package_info_plus: ^8.0.3
   rxdart: ^0.28.0
-  logging: ^1.2.0
-  fancy_logger: ^0.1.5
+  # logging: ^1.2.0
+  # fancy_logger: ^0.1.5
   surf_lint_rules: ^1.0.0
-  easy_logger: ^0.0.2
+  # easy_logger: ^0.0.2
   flutter_bloc: ^8.1.6
   bloc: ^8.1.4
   google_fonts: ^6.2.1
   intl: ^0.19.0
-  isar: ^3.1.0+1
-  isar_flutter_libs: ^3.1.0+1
   flutter_secure_storage: ^9.2.2
   file_picker: ^8.1.2
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
   cloud_firestore: ^5.4.4
-  flutter_inappwebview: ^6.0.0
+  # flutter_inappwebview: ^6.0.0
 
 
 dev_dependencies:
   auto_route_generator: ^9.0.0
   build_runner: ^2.4.13
   injectable_generator: ^2.6.2
-  isar_generator: ^3.1.0+1
   flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter

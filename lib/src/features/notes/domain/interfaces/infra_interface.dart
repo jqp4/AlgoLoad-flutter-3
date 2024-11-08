@@ -10,24 +10,4 @@ abstract interface class INoteRepository {
   Future<Either<Failure, String>> sendYoutubeTask(String youtubeUrl, NoteLanguage language);
 
   Future<Either<Failure, Note>> getTaskResult(String taskId);
-
-  // Notes Store
-
-  Future<Either<Failure, int>> storeNote(Note note);
-
-  Future<Either<Failure, Note>> readNote(int id);
-
-  Future<Either<Failure, List<Note>>> readAllNotes();
-
-  Future<Either<Failure, bool>> deleteNote(int id);
-
-  // Expected Tasks Store
-
-  Future<Either<Failure, int>> storeExpectedTask(String taskId);
-
-  Future<Either<Failure, List<String>>> readAllExpectedTaskIds();
-
-  Future<Either<Failure, List<int>>> findExpectedTask(String taskId);
-
-  Future<Either<Failure, bool>> deleteExpectedTask(int id);
 }

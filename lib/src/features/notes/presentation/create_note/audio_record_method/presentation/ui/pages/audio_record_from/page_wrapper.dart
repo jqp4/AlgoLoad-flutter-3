@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
 import 'package:notes_app_with_ai/src/core/_barrel.dart';
 
 // import 'package:notes_app_with_ai/src/features/notes/_barrel.dart';
@@ -23,9 +22,9 @@ class CreateNoteWithAudioRecordPage extends StatelessWidget {
     const password = 'zZ05w9IXqGbe';
     const submitText = 'Sign In';
 
-    final log = Logger('algoload_login');
+    final log = MyWebLogger('algoload_login');
     final client = inject<NetworkDriver>();
-    const fineStatusCode = 302;
+    const fineStatusCodes = [302];
 
     final response = await client.post(
       '/login',
@@ -44,9 +43,9 @@ class CreateNoteWithAudioRecordPage extends StatelessWidget {
 
     final logData = '(${response.statusCode}): <${rawData.runtimeType}>$rawData';
 
-    if (response.statusCode == fineStatusCode) {
-      // final msg = 'Response $logData';
-      // log.finest(msg);
+    if (fineStatusCodes.contains(response.statusCode)) {
+      final msg = 'Response $logData';
+      log.finest(msg);
 
       // todo: _safetySerialization()
 
@@ -76,9 +75,9 @@ class CreateNoteWithAudioRecordPage extends StatelessWidget {
   }
 
   Future<void> _receiveTask() async {
-    final log = Logger('algoload_receive_task');
+    final log = MyWebLogger('algoload_receive_task');
     final client = inject<NetworkDriver>();
-    const fineStatusCode = 200;
+    const fineStatusCodes = [200];
 
     final response = await client.get(
       '/receive_task',
@@ -92,14 +91,14 @@ class CreateNoteWithAudioRecordPage extends StatelessWidget {
 
     final logData = '(${response.statusCode}): <${rawData.runtimeType}>$rawData';
 
-    if (response.statusCode == fineStatusCode) {
-      // final msg = 'Response $logData';
-      // log.finest(msg);
+    if (fineStatusCodes.contains(response.statusCode)) {
+      final msg = 'Response $logData';
+      log.finest(msg);
 
       // /static/AlgoViewPage
       final ind0 = rawData.indexOf('/static/AlgoViewPage');
       final ind1 = rawData.indexOf('.json', ind0) + 5;
-      final algoviewUrl = rawData.substring(ind0, ind1);
+      final algoviewUrl = (ind0 < 0 || ind1 < 0) ? 'null' : rawData.substring(ind0, ind1);
 
       log.info(algoviewUrl);
 
@@ -120,7 +119,7 @@ class CreateNoteWithAudioRecordPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: const Center(
-        child: Text('CreateNoteWithAudioRecordPage'),
+        child: Text('AlgoLoad Flutter 3'),
       ),
     );
 

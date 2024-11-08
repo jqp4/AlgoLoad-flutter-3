@@ -3,9 +3,12 @@ import 'package:notes_app_with_ai/src/features/notes/domain/_barrel.dart';
 abstract class CreateNoteForm {
   const CreateNoteForm();
 
-  external factory CreateNoteForm.empty();
+  //Error: Only JS interop members may be 'external'.
+  //Try removing the 'external' keyword or adding a JS interop annotation.
 
-  external CreateNoteForm copyWith();
+  // external factory CreateNoteForm.empty();
+
+  // external CreateNoteForm copyWith();
 }
 
 class CreateNoteWithYoutubeForm extends CreateNoteForm {
@@ -22,7 +25,6 @@ class CreateNoteWithYoutubeForm extends CreateNoteForm {
   final NoteLanguage language;
   final String youtubeUrl;
 
-  @override
   CreateNoteWithYoutubeForm copyWith({
     NoteLanguage? language,
     String? youtubeUrl,
@@ -48,7 +50,6 @@ class CreateNoteWithAudioFileForm extends CreateNoteForm {
   final NoteLanguage language;
   final String audioFilePath;
 
-  @override
   CreateNoteWithAudioFileForm copyWith({
     NoteLanguage? language,
     String? audioFilePath,
@@ -71,7 +72,6 @@ class CreateNoteWithAudioRecordForm extends CreateNoteForm {
 
   final NoteLanguage language;
 
-  @override
   CreateNoteWithAudioRecordForm copyWith({
     NoteLanguage? language,
   }) {

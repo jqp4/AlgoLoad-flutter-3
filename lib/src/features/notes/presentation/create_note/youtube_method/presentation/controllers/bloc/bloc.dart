@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:logging/logging.dart';
 import 'package:notes_app_with_ai/src/core/_barrel.dart';
 import 'package:notes_app_with_ai/src/features/notes/domain/_barrel.dart';
 import 'package:notes_app_with_ai/src/features/notes/presentation/_barrel.dart';
@@ -20,7 +19,7 @@ class CreateNoteWithYoutubeBloc extends Bloc<CreateNoteWithYoutubeEvent, CreateN
   }
 
   final NotesBloc mainNotesBloc;
-  static final _log = Logger('CreateNoteWithYoutubeBloc');
+  static final _log = MyWebLogger('CreateNoteWithYoutubeBloc');
   var _form = CreateNoteWithYoutubeForm.empty();
   CreateNoteWithYoutubeForm get form => _form;
 

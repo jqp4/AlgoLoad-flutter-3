@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:logging/logging.dart';
 import 'package:notes_app_with_ai/src/core/_barrel.dart';
 
 /// Authorizing Intersceptor. Inject accessToken to headers.authorization.
@@ -21,7 +20,7 @@ class AuthInterceptor extends Interceptor {
 
 /// Logging Interseptor. Outputs URLs, headers, and data on request.
 class InfoInterceptor extends Interceptor {
-  static final _log = Logger('InfoInterceptor');
+  static final _log = MyWebLogger('DioLoggerInterceptor');
 
   static MapEntry<String, String> _getStringMapEntry(key, value) => MapEntry(key.toString(), value.toString());
 
@@ -49,9 +48,9 @@ class InfoInterceptor extends Interceptor {
 
     _log.info(
       '${options.method} Request:'
-      '\n- URL: ${options.uri}'
-      '\n- Headers: $logHeaders'
-      '\n- Data: $logFields',
+      '\n - URL: ${options.uri}'
+      '\n - Headers: $logHeaders'
+      '\n - Data: $logFields',
     );
 
     super.onRequest(options, handler);

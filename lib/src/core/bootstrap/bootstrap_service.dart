@@ -1,6 +1,5 @@
 import 'package:injectable/injectable.dart';
-import 'package:logging/logging.dart';
-import 'package:notes_app_with_ai/src/core/bootstrap/_barrel.dart';
+import 'package:notes_app_with_ai/src/core/_barrel.dart';
 import 'package:rxdart/rxdart.dart';
 
 typedef AsyncFunc = Future<void> Function();
@@ -24,7 +23,7 @@ enum BootstrapStages {
 /// if they failed.
 @singleton
 class BootstrapService {
-  static final _log = Logger('bootstrap');
+  late final _log = MyWebLogger('bootstrap');
 
   final _bootstrapStageSubject = BehaviorSubject<BootstrapStages>();
 
@@ -84,12 +83,12 @@ class BootstrapService {
   }
 
   Future<void> _coreStage(AppBuildType appBuildType) async {
+    // await configureLogger(appBuildType);
     await configureAppVersionService();
-    await configureLogger(appBuildType);
   }
 
   Future<void> _storageStage() async {
-    await configureLocalStorage();
+    // await configureLocalStorage();
   }
 
   Future<void> _connectionStage() async {

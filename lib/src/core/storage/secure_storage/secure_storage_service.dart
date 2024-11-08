@@ -1,6 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
-import 'package:logging/logging.dart';
+import 'package:notes_app_with_ai/src/core/_barrel.dart';
 
 @lazySingleton
 class SecureStorageService {
@@ -8,7 +8,7 @@ class SecureStorageService {
     aOptions: AndroidOptions(encryptedSharedPreferences: true),
   );
 
-  static final _log = Logger('SecureStorageService');
+  static final _log = MyWebLogger('SecureStorageService');
 
   Future<void> addValue<T>(String key, T value) async {
     _log.info('Adding value by key $key...');
