@@ -29,64 +29,32 @@ class CreateNoteWithAudioRecordPage extends StatelessWidget {
       },
     );
 
-    // final dd = response.headers;
-    // log.info('>>> $dd');
-
-    // final response = await http.post(
-    //   Uri.parse('http://localhost:3001/login'),
-    //   body: {
-    //     'username': username,
-    //     'password': password,
-    //     'submit': submitText,
-    //   },
-    // );
-
     final rawData = response.data.toString();
-    // final rawHeaders = response.headers;
-    // final logData = '(${response.statusCode}):\n'
-    //     'rawHeaders: <${rawHeaders.runtimeType}>$rawHeaders'
-    //     'rawData: <${rawData.runtimeType}>$rawData';
-
     final logData = '(${response.statusCode}): <${rawData.runtimeType}>$rawData';
 
-    if (fineStatusCodes.contains(response.statusCode)) {
-      final msg = 'Response $logData';
-      log.finest(msg);
-
-      final responseCookies = response.headers['set-cookie'];
-      final maybeSessionToken = responseCookies?[0].split(';')[0];
-
-      if (maybeSessionToken == null) {
-        // log.severe(
-        //   'SessionToken is null.'
-        //   '\n realUri = ${response.realUri}'
-        //   '\n headers = ${response.headers.map}'
-        //   '\n extra = ${response.extra}'
-        //   '\n redirects = ${response.redirects}'
-        //   '\n statusMessage = ${response.statusMessage}'
-        //   '\n isRedirect = ${response.isRedirect}'
-        //   '\n redirects = ${response.redirects}'
-        //   '\n requestOptions.data = ${response.requestOptions.data}',
-        // );
-        return;
-      }
-
-      log.finest('SessionToken: $maybeSessionToken');
-
-      await inject<SecureStorageService>().addValue<String>(
-        SecureStorageConstants.accessTokenKey,
-        maybeSessionToken,
-      );
-
-      log.finest('SessionToken saved');
-
-      // return
-    } else {
+    if (!fineStatusCodes.contains(response.statusCode)) {
       final msg = 'ServerException: $logData';
       log.severe(msg);
 
       // throw ServerException(description: msg);
+      return;
     }
+
+    final msg = 'Response $logData';
+    log.finest(msg);
+
+    final responseCookies = response.headers['set-cookie'];
+    final maybeSessionToken = responseCookies?[0].split(';')[0];
+    if (maybeSessionToken == null) return;
+
+    log.finest('SessionToken: $maybeSessionToken');
+
+    await inject<SecureStorageService>().addValue<String>(
+      SecureStorageConstants.accessTokenKey,
+      maybeSessionToken,
+    );
+
+    log.finest('SessionToken saved');
   }
 
   Future<void> _receiveTask() async {
@@ -99,31 +67,25 @@ class CreateNoteWithAudioRecordPage extends StatelessWidget {
     );
 
     final rawData = response.data.toString();
-    // final rawHeaders = response.headers;
-    // final logData = '(${response.statusCode}):\n'
-    //     'rawHeaders: <${rawHeaders.runtimeType}>$rawHeaders'
-    //     'rawData: <${rawData.runtimeType}>$rawData';
-
     final logData = '(${response.statusCode}): <${rawData.runtimeType}>$rawData';
 
-    if (fineStatusCodes.contains(response.statusCode)) {
-      final msg = 'Response $logData';
-      log.finest(msg);
-
-      // /static/AlgoViewPage
-      final ind0 = rawData.indexOf('/static/AlgoViewPage');
-      final ind1 = rawData.indexOf('.json', ind0) + 5;
-      final algoviewUrl = (ind0 < 0 || ind1 < 0) ? 'null' : rawData.substring(ind0, ind1);
-
-      log.info('algoviewUrl: $algoviewUrl');
-
-      // return
-    } else {
+    if (!fineStatusCodes.contains(response.statusCode)) {
       final msg = 'ServerException: $logData';
       log.severe(msg);
 
       // throw ServerException(description: msg);
+      return;
     }
+
+    final msg = 'Response $logData';
+    log.finest(msg);
+
+    // /static/AlgoViewPage
+    final ind0 = rawData.indexOf('/static/AlgoViewPage');
+    final ind1 = rawData.indexOf('.json', ind0) + 5;
+    final algoviewUrl = (ind0 < 0 || ind1 < 0) ? 'null' : rawData.substring(ind0, ind1);
+
+    log.info('algoviewUrl: $algoviewUrl');
   }
 
   @override
