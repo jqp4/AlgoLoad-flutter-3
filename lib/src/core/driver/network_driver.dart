@@ -1,25 +1,30 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:injectable/injectable.dart';
-import 'package:notes_app_with_ai/src/core/di/di.dart';
 import 'package:notes_app_with_ai/src/core/driver/interceptors.dart';
-import 'package:notes_app_with_ai/src/core/storage/secure_storage/_barrel.dart';
 
 @singleton
 class NetworkDriver {
-  NetworkDriver() : dio = Dio();
+  NetworkDriver() : _dio = Dio();
 
-  final Dio dio;
+  final Dio _dio;
 
   // TODO: move to env
   static const String rootUrl = 'http://localhost:3001/';
+  // static const String rootUrl = 'https://algoload.parallel.ru/';
 
   void init() {
-    dio.options
+    _dio.options
+      // ..extra = {
+      //   'withCredentials': true,
+      // }
       ..baseUrl = rootUrl
+      // ..followRedirects = false
       ..connectTimeout = const Duration(seconds: 5)
       ..receiveTimeout = const Duration(seconds: 5)
       ..validateStatus = (status) {
@@ -28,17 +33,27 @@ class NetworkDriver {
       ..headers = {
         HttpHeaders.userAgentHeader: 'dio',
         HttpHeaders.contentTypeHeader: 'application/x-www-form-urlencoded',
-        // todo:
-        // accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
       };
 
-    // TODO: add real auth
-    dio.interceptors.add(AuthInterceptor());
-    dio.interceptors.add(InfoInterceptor());
+    if (kIsWeb) {
+      // Включение withCredentials для Flutter Web
+      (_dio.httpClientAdapter as BrowserHttpClientAdapter).withCredentials = true;
+    }
+
+    _dio.interceptors.add(AuthInterceptor());
+    _dio.interceptors.add(InfoInterceptor());
+
+    // todo: remove
+    // dio.interceptors.add(InterceptorsWrapper(
+    //   onResponse: (response, handler) {
+    //     pprint('Response Headers: ${response.headers}');
+    //     return handler.next(response);
+    //   },
+    // ));
   }
 
   Future<Response> get(String url) async {
-    return dio.get(url);
+    return _dio.get(url);
   }
 
   /// Sending a POST request. On the current server,
@@ -48,11 +63,12 @@ class NetworkDriver {
     String url, {
     Map<String, dynamic> body = const {},
   }) async {
-    final rawData = <String, dynamic>{
-      // 'clientToken': await _getAccessToken(),
-    }..addAll(body);
+    // final rawData = <String, dynamic>{
+    //   // 'clientToken': await _getAccessToken(),
+    // }..addAll(body);
+    // return dio.post(url, data: rawData);
 
-    return dio.post(url, data: rawData);
+    return _dio.post(url, data: body);
   }
 
   /// Sending a POST request with a file. On the current server,
@@ -67,7 +83,7 @@ class NetworkDriver {
     final fileExtension = filePath.split('.').last;
 
     final rawData = <String, dynamic>{
-      'clientToken': await _getAccessToken(),
+      // 'clientToken': await _getAccessToken(),
     }..addAll(body);
 
     final data = <String, dynamic>{
@@ -80,17 +96,15 @@ class NetworkDriver {
     };
 
     final formData = FormData.fromMap(data);
-    return dio.post(url, data: formData);
+    return _dio.post(url, data: formData);
   }
 
-  static Future<String> _getAccessToken() async {
-    final storage = inject<SecureStorageService>();
-    final accessToken = await storage.getValue<String>(SecureStorageConstants.accessTokenKey);
-
-    if (accessToken != null && accessToken.isNotEmpty) {
-      return accessToken;
-    }
-
-    return 'null';
-  }
+  // static Future<String> _getAccessToken() async {
+  //   final storage = inject<SecureStorageService>();
+  //   final accessToken = await storage.getValue<String>(SecureStorageConstants.accessTokenKey);
+  //   if (accessToken != null && accessToken.isNotEmpty) {
+  //     return accessToken;
+  //   }
+  //   return 'null';
+  // }
 }

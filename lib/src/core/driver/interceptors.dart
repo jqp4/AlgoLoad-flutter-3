@@ -1,12 +1,16 @@
+// todo: fix import
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
+
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:notes_app_with_ai/src/core/_barrel.dart';
 
 /// Authorizing Intersceptor. Inject accessToken to headers.authorization.
 class AuthInterceptor extends Interceptor {
   @override
   Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    final storage = inject<SecureStorageService>();
-    final accessToken = await storage.getValue<String>(SecureStorageConstants.accessTokenKey);
+    final accessToken = await _getAccessToken();
 
     if (accessToken != null && accessToken.isNotEmpty) {
       // options.headers['Authorization'] = accessToken; // 'Bearer'
@@ -15,6 +19,24 @@ class AuthInterceptor extends Interceptor {
     }
 
     super.onRequest(options, handler);
+  }
+
+  Future<String?> _getAccessToken() async {
+    late final String? accessToken;
+
+    if (kIsWeb) {
+      final globalCookies = html.document.cookie;
+
+      // example
+      // session=.eJwlzjsOwjAMANC7ZGZw4m96mSpxbJW1pRPi7iDxTvDeZc8zrqNsr_OOR9mfq2wlY7rqmCvXqmEQgAGZ0d1CE51B1ZAkJgIEzyrVRLhP7FWjN1Cy3kfaVFLRpsuFKgs34gE-vWHrhuAZtQI60ZCxkp0MBwOUX-S-4vxvsHy-42QuuA.Z0h9GA.pt13d166lL-9w1aUPAs5ETuM6pA
+
+      accessToken = globalCookies?.split(';')[0];
+    } else {
+      final storage = inject<SecureStorageService>();
+      accessToken = await storage.getValue<String>(SecureStorageConstants.accessTokenKey);
+    }
+
+    return accessToken;
   }
 }
 
@@ -26,9 +48,8 @@ class InfoInterceptor extends Interceptor {
 
   @override
   Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    final logHeaders = options.headers.map(_getStringMapEntry); // .entries.map((e) => _logLine(e.key, e.value));
-
-    Map<String, String> logFields = {};
+    final logHeaders = options.headers.map(_getStringMapEntry);
+    Map<String, String>? logFields;
 
     if (options.method == 'POST') {
       if (options.data is FormData) {
@@ -44,13 +65,13 @@ class InfoInterceptor extends Interceptor {
         _log.warning('$msgKey: $msgValue');
         logFields = {msgKey: msgValue};
       }
-    }
+    } else {}
 
     _log.info(
       '${options.method} Request:'
       '\n - URL: ${options.uri}'
-      '\n - Headers: $logHeaders'
-      '\n - Data: $logFields',
+      '\n - Data: $logFields'
+      '\n - Headers: $logHeaders',
     );
 
     super.onRequest(options, handler);

@@ -1,7 +1,5 @@
 // ignore_for_file: constant_identifier_names
 
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:notes_app_with_ai/src/foundation/_barrel.dart';
 
@@ -31,18 +29,15 @@ class MyWebLoggerConfig {
 
 class MyWebLogger {
   MyWebLogger(this.name) : config = MyWebLoggerConfig();
-  // _logs = StreamController<String>();
 
   final String name;
   final MyWebLoggerConfig config;
-  // final StreamController<String> _logs;
 
   int get _timestamp => MyWebLoggerUtils.nowTimestamp - config.initialTimestamp;
 
   void _log(Level level, String message, [Object? error, StackTrace? stackTrace]) {
     if (!kDebugMode) return;
 
-    // final time = DateTime.now().millisecondsSinceEpoch % 100000000; // last 27 hours
     final timestamp = _timestamp;
     final errorStr = error == null ? '' : '\nError: $error';
     final traceStr = stackTrace == null ? '' : '\nTrace: $stackTrace';

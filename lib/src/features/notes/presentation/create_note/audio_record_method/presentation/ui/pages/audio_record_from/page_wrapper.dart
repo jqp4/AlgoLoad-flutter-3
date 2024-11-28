@@ -2,12 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:notes_app_with_ai/src/core/_barrel.dart';
 
-// import 'package:notes_app_with_ai/src/features/notes/_barrel.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:notes_app_with_ai/src/core/_barrel.dart';
-// import 'package:notes_app_with_ai/src/features/notes/presentation/_barrel.dart';
-// import 'package:notes_app_with_ai/src/foundation/utils/debug_print.dart';
-
 @RoutePage()
 class CreateNoteWithAudioRecordPage extends StatelessWidget {
   const CreateNoteWithAudioRecordPage({
@@ -24,7 +18,7 @@ class CreateNoteWithAudioRecordPage extends StatelessWidget {
 
     final log = MyWebLogger('algoload_login');
     final client = inject<NetworkDriver>();
-    const fineStatusCodes = [302];
+    const fineStatusCodes = [302, 200];
 
     final response = await client.post(
       '/login',
@@ -34,6 +28,18 @@ class CreateNoteWithAudioRecordPage extends StatelessWidget {
         'submit': submitText,
       },
     );
+
+    // final dd = response.headers;
+    // log.info('>>> $dd');
+
+    // final response = await http.post(
+    //   Uri.parse('http://localhost:3001/login'),
+    //   body: {
+    //     'username': username,
+    //     'password': password,
+    //     'submit': submitText,
+    //   },
+    // );
 
     final rawData = response.data.toString();
     // final rawHeaders = response.headers;
@@ -47,12 +53,21 @@ class CreateNoteWithAudioRecordPage extends StatelessWidget {
       final msg = 'Response $logData';
       log.finest(msg);
 
-      // todo: _safetySerialization()
-
-      final maybeSessionToken = response.headers['set-cookie']?[0].split(';')[0]; // .substring(8);
+      final responseCookies = response.headers['set-cookie'];
+      final maybeSessionToken = responseCookies?[0].split(';')[0];
 
       if (maybeSessionToken == null) {
-        log.severe('SessionToken is null');
+        // log.severe(
+        //   'SessionToken is null.'
+        //   '\n realUri = ${response.realUri}'
+        //   '\n headers = ${response.headers.map}'
+        //   '\n extra = ${response.extra}'
+        //   '\n redirects = ${response.redirects}'
+        //   '\n statusMessage = ${response.statusMessage}'
+        //   '\n isRedirect = ${response.isRedirect}'
+        //   '\n redirects = ${response.redirects}'
+        //   '\n requestOptions.data = ${response.requestOptions.data}',
+        // );
         return;
       }
 
@@ -100,7 +115,7 @@ class CreateNoteWithAudioRecordPage extends StatelessWidget {
       final ind1 = rawData.indexOf('.json', ind0) + 5;
       final algoviewUrl = (ind0 < 0 || ind1 < 0) ? 'null' : rawData.substring(ind0, ind1);
 
-      log.info(algoviewUrl);
+      log.info('algoviewUrl: $algoviewUrl');
 
       // return
     } else {
@@ -113,8 +128,7 @@ class CreateNoteWithAudioRecordPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _auth();
-    _receiveTask();
+    _auth().then((_) => _receiveTask());
 
     return Scaffold(
       appBar: AppBar(),
