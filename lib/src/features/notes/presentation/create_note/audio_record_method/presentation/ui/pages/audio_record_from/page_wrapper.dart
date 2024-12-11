@@ -1,15 +1,54 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:notes_app_with_ai/src/core/_barrel.dart';
+import 'package:notes_app_with_ai/src/foundation/utils/debug_print.dart';
+
+class AlgoViewTask {
+  AlgoViewTask({
+    required this.userComment,
+    required this.graphSourceConfig,
+    required this.algoviewStaticLink,
+    required this.jsonGraphDataLink,
+    required this.algoviewFullUrl,
+  });
+
+  final String userComment;
+  final String graphSourceConfig;
+  final String algoviewStaticLink;
+  final String jsonGraphDataLink;
+  final String algoviewFullUrl;
+}
 
 @RoutePage()
-class CreateNoteWithAudioRecordPage extends StatelessWidget {
+class CreateNoteWithAudioRecordPage extends StatefulWidget {
   const CreateNoteWithAudioRecordPage({
     // required this.notesBloc,
     super.key,
   });
 
   // final NotesBloc notesBloc;
+
+  @override
+  State<CreateNoteWithAudioRecordPage> createState() => _CreateNoteWithAudioRecordPageState();
+}
+
+class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecordPage> {
+  AlgoViewTask? _task;
+  final _codeController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _auth().then((_) => _receiveTask().then((task) {
+          if (!mounted) return;
+          setState(() {
+            _task = task;
+            _codeController.text = _task!.graphSourceConfig;
+          });
+        }));
+  }
 
   Future<void> _auth() async {
     const username = 'kkk000';
@@ -57,7 +96,7 @@ class CreateNoteWithAudioRecordPage extends StatelessWidget {
     log.finest('SessionToken saved');
   }
 
-  Future<void> _receiveTask() async {
+  Future<AlgoViewTask> _receiveTask() async {
     final log = MyWebLogger('algoload_receive_task');
     final client = inject<NetworkDriver>();
     const fineStatusCodes = [200];
@@ -73,24 +112,54 @@ class CreateNoteWithAudioRecordPage extends StatelessWidget {
       final msg = 'ServerException: $logData';
       log.severe(msg);
 
-      // throw ServerException(description: msg);
-      return;
+      throw ServerException(description: msg);
     }
 
     final msg = 'Response $logData';
     log.finest(msg);
 
-    log.info(rawData['algoview_static_link']);
+    // http://localhost:3001/static/AlgoViewPage.html?jsonGraphDataUrl=/user/kkk000/Json_models/graphData.json
+    final algoviewFullUrl =
+        "${NetworkDriver.rootUrl}${rawData['algoview_static_link']}?jsonGraphDataUrl=${rawData['json_graph_data_link']}";
+
+    log.info('algoviewFullUrl: $algoviewFullUrl');
+
+    return AlgoViewTask(
+      userComment: rawData['user_comment'],
+      graphSourceConfig: rawData['graph_source_config'],
+      algoviewStaticLink: rawData['algoview_static_link'],
+      jsonGraphDataLink: rawData['json_graph_data_link'],
+      algoviewFullUrl: algoviewFullUrl,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    _auth().then((_) => _receiveTask());
-
     return Scaffold(
-      appBar: AppBar(),
-      body: const Center(
-        child: Text('AlgoLoad Flutter 3'),
+      appBar: AppBar(
+        title: const Text('AlgoLoad Flutter 3'),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        children: [
+          if (_task != null) ...[
+            AlgoViewWebViewContainer(
+              algoViewFullUrl: _task!.algoviewFullUrl,
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              // obscureText: true,
+              controller: _codeController,
+              minLines: 20,
+              maxLines: 50,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Graph source code',
+              ),
+            ),
+            const SizedBox(height: 32),
+          ]
+        ],
       ),
     );
 
@@ -127,5 +196,49 @@ class CreateNoteWithAudioRecordPage extends StatelessWidget {
     //     },
     //   ),
     // );
+  }
+}
+
+class AlgoViewWebViewContainer extends StatelessWidget {
+  const AlgoViewWebViewContainer({
+    required this.algoViewFullUrl,
+    super.key,
+  });
+
+  final String algoViewFullUrl;
+
+  static final _log = MyWebLogger('algoview_webview_container');
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.7,
+      ),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 197, 0, 0),
+        borderRadius: BorderRadius.circular(3),
+      ),
+      padding: const EdgeInsets.all(3),
+      child: InAppWebView(
+        initialUrlRequest: URLRequest(
+          url: WebUri(algoViewFullUrl),
+          // todo: auth???
+          // headers:
+        ),
+        onWebViewCreated: (controller) async {
+          _log.fine('onWebViewCreated');
+        },
+        onLoadStart: (controller, url) {
+          _log.fine('onLoadStart: $url');
+        },
+        onLoadStop: (controller, url) async {
+          _log.fine('onLoadStop: $url');
+        },
+        onProgressChanged: (controller, progress) {
+          _log.fine('onProgressChanged: $progress');
+        },
+      ),
+    );
   }
 }

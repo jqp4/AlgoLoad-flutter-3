@@ -18,10 +18,7 @@ dependencies:
   dio: ^5.7.0
   package_info_plus: ^8.0.3
   rxdart: ^0.28.0
-  # logging: ^1.2.0
-  # fancy_logger: ^0.1.5
   surf_lint_rules: ^1.0.0
-  # easy_logger: ^0.0.2
   flutter_bloc: ^8.1.6
   bloc: ^8.1.4
   google_fonts: ^6.2.1
@@ -31,7 +28,7 @@ dependencies:
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
   cloud_firestore: ^5.4.4
-  # flutter_inappwebview: ^6.0.0
+  flutter_inappwebview: ^6.0.0
 
 
 dev_dependencies:
