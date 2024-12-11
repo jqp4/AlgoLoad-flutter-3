@@ -13,7 +13,7 @@ class LoginPage extends StatelessWidget {
     final loadingOverlay = inject<LoadingOverlay>();
 
     return BlocProvider<AuthBloc>(
-      create: (_) => AuthBloc(),
+      create: (_) => AuthBloc()..add(const AuthEvent.tryAutoLogin()),
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           loadingOverlay.hide();
@@ -24,7 +24,9 @@ class LoginPage extends StatelessWidget {
               loadingOverlay.show(context);
             },
             completed: () {
-              context.router.popUntilRoot();
+              context.router
+                ..popUntilRoot()
+                ..replace(const CreateNoteWithAudioRecordRoute());
             },
           );
         },

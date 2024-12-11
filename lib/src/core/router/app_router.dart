@@ -26,7 +26,7 @@ class AppRouter extends RootStackRouter {
 
         AutoRoute(
           page: CreateNoteWithAudioRecordRoute.page,
-          path: '/createNote/audioRecord/',
+          path: '/algoview/',
         ),
       ];
 }

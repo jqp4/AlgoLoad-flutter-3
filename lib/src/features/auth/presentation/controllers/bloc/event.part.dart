@@ -8,5 +8,7 @@ class AuthEvent with _$AuthEvent {
 
   const factory AuthEvent.submitLoginForm() = _SubmitLoginForm;
 
+  const factory AuthEvent.tryAutoLogin() = _TryAutoLogin;
+
   const factory AuthEvent.logout() = _Logout;
 }

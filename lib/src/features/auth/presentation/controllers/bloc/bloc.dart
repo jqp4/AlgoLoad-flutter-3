@@ -14,7 +14,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(const AuthState.initial()) {
     on<_UpdateUserNameForm>(_updateUserNameForm);
     on<_UpdatePasswordForm>(_updatePasswordForm);
-    on<_SubmitLoginForm>(_submiLoginForm);
+    on<_SubmitLoginForm>(_submitLoginForm);
+    on<_TryAutoLogin>(_tryAutoLogin);
     on<_Logout>(_logout);
   }
 
@@ -49,7 +50,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const _Loaded());
   }
 
-  Future _submiLoginForm(
+  Future _submitLoginForm(
     _SubmitLoginForm event,
     Emitter<AuthState> emit,
   ) async {
@@ -62,6 +63,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     if (result.isLeft()) {
       emit(_Failure(result.asLeft().description));
+      return;
+    }
+
+    emit(const _Completed());
+  }
+
+  Future _tryAutoLogin(
+    _TryAutoLogin event,
+    Emitter<AuthState> emit,
+  ) async {
+    if (state is _Pending) return;
+    emit(const _Pending());
+
+    _log.info('Catch _SubmitLoginForm event');
+
+    final result = await inject<LoginUser>()(_form);
+
+    if (result.isLeft()) {
+      emit(const _Loaded());
       return;
     }
 
@@ -84,6 +104,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       return;
     }
 
-    emit(const _Completed());
+    _form = LoginForm.empty();
+    emit(const _Loaded());
   }
 }

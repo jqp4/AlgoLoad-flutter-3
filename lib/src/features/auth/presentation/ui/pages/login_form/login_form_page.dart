@@ -108,15 +108,6 @@ class _LoginFormPageState extends State<LoginFormPage> {
                         },
                       ),
 
-                      const Gap.y(32),
-                      MyButton(
-                        title: 'Sing out (tmp)',
-                        isExpanded: true,
-                        onPressed: () {
-                          _bloc.add(const AuthEvent.logout());
-                        },
-                      ),
-
                       // Сообщение об ошибке, если есть
                       if (widget.maybeFailureDescription != null) ...[
                         const Gap.y(36),

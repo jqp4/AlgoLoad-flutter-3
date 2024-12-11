@@ -21,6 +21,7 @@ mixin _$AuthEvent {
     required TResult Function(String value) updateUserNameForm,
     required TResult Function(String value) updatePasswordForm,
     required TResult Function() submitLoginForm,
+    required TResult Function() tryAutoLogin,
     required TResult Function() logout,
   }) =>
       throw _privateConstructorUsedError;
@@ -29,6 +30,7 @@ mixin _$AuthEvent {
     TResult? Function(String value)? updateUserNameForm,
     TResult? Function(String value)? updatePasswordForm,
     TResult? Function()? submitLoginForm,
+    TResult? Function()? tryAutoLogin,
     TResult? Function()? logout,
   }) =>
       throw _privateConstructorUsedError;
@@ -37,6 +39,7 @@ mixin _$AuthEvent {
     TResult Function(String value)? updateUserNameForm,
     TResult Function(String value)? updatePasswordForm,
     TResult Function()? submitLoginForm,
+    TResult Function()? tryAutoLogin,
     TResult Function()? logout,
     required TResult orElse(),
   }) =>
@@ -46,6 +49,7 @@ mixin _$AuthEvent {
     required TResult Function(_UpdateUserNameForm value) updateUserNameForm,
     required TResult Function(_UpdatePasswordForm value) updatePasswordForm,
     required TResult Function(_SubmitLoginForm value) submitLoginForm,
+    required TResult Function(_TryAutoLogin value) tryAutoLogin,
     required TResult Function(_Logout value) logout,
   }) =>
       throw _privateConstructorUsedError;
@@ -54,6 +58,7 @@ mixin _$AuthEvent {
     TResult? Function(_UpdateUserNameForm value)? updateUserNameForm,
     TResult? Function(_UpdatePasswordForm value)? updatePasswordForm,
     TResult? Function(_SubmitLoginForm value)? submitLoginForm,
+    TResult? Function(_TryAutoLogin value)? tryAutoLogin,
     TResult? Function(_Logout value)? logout,
   }) =>
       throw _privateConstructorUsedError;
@@ -62,6 +67,7 @@ mixin _$AuthEvent {
     TResult Function(_UpdateUserNameForm value)? updateUserNameForm,
     TResult Function(_UpdatePasswordForm value)? updatePasswordForm,
     TResult Function(_SubmitLoginForm value)? submitLoginForm,
+    TResult Function(_TryAutoLogin value)? tryAutoLogin,
     TResult Function(_Logout value)? logout,
     required TResult orElse(),
   }) =>
@@ -160,6 +166,7 @@ class _$UpdateUserNameFormImpl implements _UpdateUserNameForm {
     required TResult Function(String value) updateUserNameForm,
     required TResult Function(String value) updatePasswordForm,
     required TResult Function() submitLoginForm,
+    required TResult Function() tryAutoLogin,
     required TResult Function() logout,
   }) {
     return updateUserNameForm(value);
@@ -171,6 +178,7 @@ class _$UpdateUserNameFormImpl implements _UpdateUserNameForm {
     TResult? Function(String value)? updateUserNameForm,
     TResult? Function(String value)? updatePasswordForm,
     TResult? Function()? submitLoginForm,
+    TResult? Function()? tryAutoLogin,
     TResult? Function()? logout,
   }) {
     return updateUserNameForm?.call(value);
@@ -182,6 +190,7 @@ class _$UpdateUserNameFormImpl implements _UpdateUserNameForm {
     TResult Function(String value)? updateUserNameForm,
     TResult Function(String value)? updatePasswordForm,
     TResult Function()? submitLoginForm,
+    TResult Function()? tryAutoLogin,
     TResult Function()? logout,
     required TResult orElse(),
   }) {
@@ -197,6 +206,7 @@ class _$UpdateUserNameFormImpl implements _UpdateUserNameForm {
     required TResult Function(_UpdateUserNameForm value) updateUserNameForm,
     required TResult Function(_UpdatePasswordForm value) updatePasswordForm,
     required TResult Function(_SubmitLoginForm value) submitLoginForm,
+    required TResult Function(_TryAutoLogin value) tryAutoLogin,
     required TResult Function(_Logout value) logout,
   }) {
     return updateUserNameForm(this);
@@ -208,6 +218,7 @@ class _$UpdateUserNameFormImpl implements _UpdateUserNameForm {
     TResult? Function(_UpdateUserNameForm value)? updateUserNameForm,
     TResult? Function(_UpdatePasswordForm value)? updatePasswordForm,
     TResult? Function(_SubmitLoginForm value)? submitLoginForm,
+    TResult? Function(_TryAutoLogin value)? tryAutoLogin,
     TResult? Function(_Logout value)? logout,
   }) {
     return updateUserNameForm?.call(this);
@@ -219,6 +230,7 @@ class _$UpdateUserNameFormImpl implements _UpdateUserNameForm {
     TResult Function(_UpdateUserNameForm value)? updateUserNameForm,
     TResult Function(_UpdatePasswordForm value)? updatePasswordForm,
     TResult Function(_SubmitLoginForm value)? submitLoginForm,
+    TResult Function(_TryAutoLogin value)? tryAutoLogin,
     TResult Function(_Logout value)? logout,
     required TResult orElse(),
   }) {
@@ -314,6 +326,7 @@ class _$UpdatePasswordFormImpl implements _UpdatePasswordForm {
     required TResult Function(String value) updateUserNameForm,
     required TResult Function(String value) updatePasswordForm,
     required TResult Function() submitLoginForm,
+    required TResult Function() tryAutoLogin,
     required TResult Function() logout,
   }) {
     return updatePasswordForm(value);
@@ -325,6 +338,7 @@ class _$UpdatePasswordFormImpl implements _UpdatePasswordForm {
     TResult? Function(String value)? updateUserNameForm,
     TResult? Function(String value)? updatePasswordForm,
     TResult? Function()? submitLoginForm,
+    TResult? Function()? tryAutoLogin,
     TResult? Function()? logout,
   }) {
     return updatePasswordForm?.call(value);
@@ -336,6 +350,7 @@ class _$UpdatePasswordFormImpl implements _UpdatePasswordForm {
     TResult Function(String value)? updateUserNameForm,
     TResult Function(String value)? updatePasswordForm,
     TResult Function()? submitLoginForm,
+    TResult Function()? tryAutoLogin,
     TResult Function()? logout,
     required TResult orElse(),
   }) {
@@ -351,6 +366,7 @@ class _$UpdatePasswordFormImpl implements _UpdatePasswordForm {
     required TResult Function(_UpdateUserNameForm value) updateUserNameForm,
     required TResult Function(_UpdatePasswordForm value) updatePasswordForm,
     required TResult Function(_SubmitLoginForm value) submitLoginForm,
+    required TResult Function(_TryAutoLogin value) tryAutoLogin,
     required TResult Function(_Logout value) logout,
   }) {
     return updatePasswordForm(this);
@@ -362,6 +378,7 @@ class _$UpdatePasswordFormImpl implements _UpdatePasswordForm {
     TResult? Function(_UpdateUserNameForm value)? updateUserNameForm,
     TResult? Function(_UpdatePasswordForm value)? updatePasswordForm,
     TResult? Function(_SubmitLoginForm value)? submitLoginForm,
+    TResult? Function(_TryAutoLogin value)? tryAutoLogin,
     TResult? Function(_Logout value)? logout,
   }) {
     return updatePasswordForm?.call(this);
@@ -373,6 +390,7 @@ class _$UpdatePasswordFormImpl implements _UpdatePasswordForm {
     TResult Function(_UpdateUserNameForm value)? updateUserNameForm,
     TResult Function(_UpdatePasswordForm value)? updatePasswordForm,
     TResult Function(_SubmitLoginForm value)? submitLoginForm,
+    TResult Function(_TryAutoLogin value)? tryAutoLogin,
     TResult Function(_Logout value)? logout,
     required TResult orElse(),
   }) {
@@ -440,6 +458,7 @@ class _$SubmitLoginFormImpl implements _SubmitLoginForm {
     required TResult Function(String value) updateUserNameForm,
     required TResult Function(String value) updatePasswordForm,
     required TResult Function() submitLoginForm,
+    required TResult Function() tryAutoLogin,
     required TResult Function() logout,
   }) {
     return submitLoginForm();
@@ -451,6 +470,7 @@ class _$SubmitLoginFormImpl implements _SubmitLoginForm {
     TResult? Function(String value)? updateUserNameForm,
     TResult? Function(String value)? updatePasswordForm,
     TResult? Function()? submitLoginForm,
+    TResult? Function()? tryAutoLogin,
     TResult? Function()? logout,
   }) {
     return submitLoginForm?.call();
@@ -462,6 +482,7 @@ class _$SubmitLoginFormImpl implements _SubmitLoginForm {
     TResult Function(String value)? updateUserNameForm,
     TResult Function(String value)? updatePasswordForm,
     TResult Function()? submitLoginForm,
+    TResult Function()? tryAutoLogin,
     TResult Function()? logout,
     required TResult orElse(),
   }) {
@@ -477,6 +498,7 @@ class _$SubmitLoginFormImpl implements _SubmitLoginForm {
     required TResult Function(_UpdateUserNameForm value) updateUserNameForm,
     required TResult Function(_UpdatePasswordForm value) updatePasswordForm,
     required TResult Function(_SubmitLoginForm value) submitLoginForm,
+    required TResult Function(_TryAutoLogin value) tryAutoLogin,
     required TResult Function(_Logout value) logout,
   }) {
     return submitLoginForm(this);
@@ -488,6 +510,7 @@ class _$SubmitLoginFormImpl implements _SubmitLoginForm {
     TResult? Function(_UpdateUserNameForm value)? updateUserNameForm,
     TResult? Function(_UpdatePasswordForm value)? updatePasswordForm,
     TResult? Function(_SubmitLoginForm value)? submitLoginForm,
+    TResult? Function(_TryAutoLogin value)? tryAutoLogin,
     TResult? Function(_Logout value)? logout,
   }) {
     return submitLoginForm?.call(this);
@@ -499,6 +522,7 @@ class _$SubmitLoginFormImpl implements _SubmitLoginForm {
     TResult Function(_UpdateUserNameForm value)? updateUserNameForm,
     TResult Function(_UpdatePasswordForm value)? updatePasswordForm,
     TResult Function(_SubmitLoginForm value)? submitLoginForm,
+    TResult Function(_TryAutoLogin value)? tryAutoLogin,
     TResult Function(_Logout value)? logout,
     required TResult orElse(),
   }) {
@@ -511,6 +535,129 @@ class _$SubmitLoginFormImpl implements _SubmitLoginForm {
 
 abstract class _SubmitLoginForm implements AuthEvent {
   const factory _SubmitLoginForm() = _$SubmitLoginFormImpl;
+}
+
+/// @nodoc
+abstract class _$$TryAutoLoginImplCopyWith<$Res> {
+  factory _$$TryAutoLoginImplCopyWith(
+          _$TryAutoLoginImpl value, $Res Function(_$TryAutoLoginImpl) then) =
+      __$$TryAutoLoginImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$TryAutoLoginImplCopyWithImpl<$Res>
+    extends _$AuthEventCopyWithImpl<$Res, _$TryAutoLoginImpl>
+    implements _$$TryAutoLoginImplCopyWith<$Res> {
+  __$$TryAutoLoginImplCopyWithImpl(
+      _$TryAutoLoginImpl _value, $Res Function(_$TryAutoLoginImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$TryAutoLoginImpl implements _TryAutoLogin {
+  const _$TryAutoLoginImpl();
+
+  @override
+  String toString() {
+    return 'AuthEvent.tryAutoLogin()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$TryAutoLoginImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String value) updateUserNameForm,
+    required TResult Function(String value) updatePasswordForm,
+    required TResult Function() submitLoginForm,
+    required TResult Function() tryAutoLogin,
+    required TResult Function() logout,
+  }) {
+    return tryAutoLogin();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String value)? updateUserNameForm,
+    TResult? Function(String value)? updatePasswordForm,
+    TResult? Function()? submitLoginForm,
+    TResult? Function()? tryAutoLogin,
+    TResult? Function()? logout,
+  }) {
+    return tryAutoLogin?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String value)? updateUserNameForm,
+    TResult Function(String value)? updatePasswordForm,
+    TResult Function()? submitLoginForm,
+    TResult Function()? tryAutoLogin,
+    TResult Function()? logout,
+    required TResult orElse(),
+  }) {
+    if (tryAutoLogin != null) {
+      return tryAutoLogin();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_UpdateUserNameForm value) updateUserNameForm,
+    required TResult Function(_UpdatePasswordForm value) updatePasswordForm,
+    required TResult Function(_SubmitLoginForm value) submitLoginForm,
+    required TResult Function(_TryAutoLogin value) tryAutoLogin,
+    required TResult Function(_Logout value) logout,
+  }) {
+    return tryAutoLogin(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_UpdateUserNameForm value)? updateUserNameForm,
+    TResult? Function(_UpdatePasswordForm value)? updatePasswordForm,
+    TResult? Function(_SubmitLoginForm value)? submitLoginForm,
+    TResult? Function(_TryAutoLogin value)? tryAutoLogin,
+    TResult? Function(_Logout value)? logout,
+  }) {
+    return tryAutoLogin?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_UpdateUserNameForm value)? updateUserNameForm,
+    TResult Function(_UpdatePasswordForm value)? updatePasswordForm,
+    TResult Function(_SubmitLoginForm value)? submitLoginForm,
+    TResult Function(_TryAutoLogin value)? tryAutoLogin,
+    TResult Function(_Logout value)? logout,
+    required TResult orElse(),
+  }) {
+    if (tryAutoLogin != null) {
+      return tryAutoLogin(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _TryAutoLogin implements AuthEvent {
+  const factory _TryAutoLogin() = _$TryAutoLoginImpl;
 }
 
 /// @nodoc
@@ -557,6 +704,7 @@ class _$LogoutImpl implements _Logout {
     required TResult Function(String value) updateUserNameForm,
     required TResult Function(String value) updatePasswordForm,
     required TResult Function() submitLoginForm,
+    required TResult Function() tryAutoLogin,
     required TResult Function() logout,
   }) {
     return logout();
@@ -568,6 +716,7 @@ class _$LogoutImpl implements _Logout {
     TResult? Function(String value)? updateUserNameForm,
     TResult? Function(String value)? updatePasswordForm,
     TResult? Function()? submitLoginForm,
+    TResult? Function()? tryAutoLogin,
     TResult? Function()? logout,
   }) {
     return logout?.call();
@@ -579,6 +728,7 @@ class _$LogoutImpl implements _Logout {
     TResult Function(String value)? updateUserNameForm,
     TResult Function(String value)? updatePasswordForm,
     TResult Function()? submitLoginForm,
+    TResult Function()? tryAutoLogin,
     TResult Function()? logout,
     required TResult orElse(),
   }) {
@@ -594,6 +744,7 @@ class _$LogoutImpl implements _Logout {
     required TResult Function(_UpdateUserNameForm value) updateUserNameForm,
     required TResult Function(_UpdatePasswordForm value) updatePasswordForm,
     required TResult Function(_SubmitLoginForm value) submitLoginForm,
+    required TResult Function(_TryAutoLogin value) tryAutoLogin,
     required TResult Function(_Logout value) logout,
   }) {
     return logout(this);
@@ -605,6 +756,7 @@ class _$LogoutImpl implements _Logout {
     TResult? Function(_UpdateUserNameForm value)? updateUserNameForm,
     TResult? Function(_UpdatePasswordForm value)? updatePasswordForm,
     TResult? Function(_SubmitLoginForm value)? submitLoginForm,
+    TResult? Function(_TryAutoLogin value)? tryAutoLogin,
     TResult? Function(_Logout value)? logout,
   }) {
     return logout?.call(this);
@@ -616,6 +768,7 @@ class _$LogoutImpl implements _Logout {
     TResult Function(_UpdateUserNameForm value)? updateUserNameForm,
     TResult Function(_UpdatePasswordForm value)? updatePasswordForm,
     TResult Function(_SubmitLoginForm value)? submitLoginForm,
+    TResult Function(_TryAutoLogin value)? tryAutoLogin,
     TResult Function(_Logout value)? logout,
     required TResult orElse(),
   }) {

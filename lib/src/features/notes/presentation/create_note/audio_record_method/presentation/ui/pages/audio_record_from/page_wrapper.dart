@@ -2,9 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:notes_app_with_ai/src/core/_barrel.dart';
+import 'package:notes_app_with_ai/src/features/auth/_barrel.dart';
 
-class AlgoViewTask {
-  AlgoViewTask({
+class AlgoViewComplitedTask {
+  AlgoViewComplitedTask({
     required this.userComment,
     required this.graphSourceConfig,
     required this.algoviewStaticLink,
@@ -33,69 +34,25 @@ class CreateNoteWithAudioRecordPage extends StatefulWidget {
 }
 
 class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecordPage> {
-  AlgoViewTask? _task;
+  AlgoViewComplitedTask? _task;
   final _codeController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
 
-    _auth().then((_) => _receiveTask().then((task) {
-          if (!mounted) return;
-          setState(() {
-            _task = task;
-            _codeController.text = _task!.graphSourceConfig;
-          });
-        }));
-  }
-
-  Future<void> _auth() async {
-    const username = 'kkk000';
-    const password = 'zZ05w9IXqGbe';
-    const submitText = 'Sign In';
-
-    final log = MyWebLogger('algoload_login');
-    final client = inject<NetworkDriver>();
-    const fineStatusCodes = [302, 200];
-
-    final response = await client.post(
-      '/app/login',
-      body: {
-        'username': username,
-        'password': password,
-        'submit': submitText,
+    _receiveTask().then(
+      (task) {
+        if (!mounted) return;
+        setState(() {
+          _task = task;
+          _codeController.text = _task!.graphSourceConfig;
+        });
       },
     );
-
-    final rawData = response.data;
-    final logData = '(${response.statusCode}): <${rawData.runtimeType}>$rawData';
-
-    if (!fineStatusCodes.contains(response.statusCode)) {
-      final msg = 'ServerException: $logData';
-      log.severe(msg);
-
-      // throw ServerException(description: msg);
-      return;
-    }
-
-    final msg = 'Response $logData';
-    log.finest(msg);
-
-    final responseCookies = response.headers['set-cookie'];
-    final maybeSessionToken = responseCookies?[0].split(';')[0];
-    if (maybeSessionToken == null) return;
-
-    log.finest('SessionToken: $maybeSessionToken');
-
-    await inject<SecureStorageService>().addValue<String>(
-      SecureStorageConstants.accessTokenKey,
-      maybeSessionToken,
-    );
-
-    log.finest('SessionToken saved');
   }
 
-  Future<AlgoViewTask> _receiveTask() async {
+  Future<AlgoViewComplitedTask> _receiveTask() async {
     final log = MyWebLogger('algoload_receive_task');
     final client = inject<NetworkDriver>();
     const fineStatusCodes = [200];
@@ -123,7 +80,7 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
 
     log.info('algoviewFullUrl: $algoviewFullUrl');
 
-    return AlgoViewTask(
+    return AlgoViewComplitedTask(
       userComment: rawData['user_comment'],
       graphSourceConfig: rawData['graph_source_config'],
       algoviewStaticLink: rawData['algoview_static_link'],
@@ -135,29 +92,49 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('AlgoLoad Flutter 3'),
-      // ),
+      appBar: AppBar(
+        title: const Text('AlgoLoad Flutter 3'),
+      ),
       body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 32),
         children: [
           if (_task != null) ...[
             AlgoViewWebViewContainer(
               algoViewFullUrl: _task!.algoviewFullUrl,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 32),
+            const Text('Graph source code'),
+            const SizedBox(height: 8),
             TextField(
-              // obscureText: true,
               controller: _codeController,
               minLines: 20,
               maxLines: 50,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Graph source code',
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
             const SizedBox(height: 32),
-          ]
+          ],
+
+          // todo: move to profile
+          // Sing out (tmp)
+          MyButton(
+            title: 'Sing out',
+            onPressed: () {
+              AuthBloc().add(const AuthEvent.logout());
+              Future.delayed(
+                const Duration(milliseconds: 150),
+                () {
+                  context.router
+                    ..popUntilRoot()
+                    ..replace(const LoginRoute());
+                },
+              );
+            },
+          ),
+          const Gap.y(32),
         ],
       ),
     );
@@ -210,33 +187,31 @@ class AlgoViewWebViewContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return ConstrainedBox(
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.7,
+        maxHeight: MediaQuery.of(context).size.height * 0.6,
       ),
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 197, 0, 0),
-        borderRadius: BorderRadius.circular(3),
-      ),
-      padding: const EdgeInsets.all(3),
-      child: InAppWebView(
-        initialUrlRequest: URLRequest(
-          url: WebUri(algoViewFullUrl),
-          // todo: auth???
-          // headers:
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: InAppWebView(
+          initialUrlRequest: URLRequest(
+            url: WebUri(algoViewFullUrl),
+            // todo: auth???
+            // headers:
+          ),
+          onWebViewCreated: (controller) async {
+            _log.fine('onWebViewCreated');
+          },
+          onLoadStart: (controller, url) {
+            _log.fine('onLoadStart: $url');
+          },
+          onLoadStop: (controller, url) async {
+            _log.fine('onLoadStop: $url');
+          },
+          onProgressChanged: (controller, progress) {
+            _log.fine('onProgressChanged: $progress');
+          },
         ),
-        onWebViewCreated: (controller) async {
-          _log.fine('onWebViewCreated');
-        },
-        onLoadStart: (controller, url) {
-          _log.fine('onLoadStart: $url');
-        },
-        onLoadStop: (controller, url) async {
-          _log.fine('onLoadStop: $url');
-        },
-        onProgressChanged: (controller, progress) {
-          _log.fine('onProgressChanged: $progress');
-        },
       ),
     );
   }
