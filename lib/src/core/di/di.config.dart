@@ -11,6 +11,11 @@
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
+import '../../features/auth/domain/_barrel.dart' as _i535;
+import '../../features/auth/domain/usecases/usecases.dart' as _i478;
+import '../../features/auth/external/remote_data_source.dart' as _i52;
+import '../../features/auth/infra/_barrel.dart' as _i264;
+import '../../features/auth/infra/repository/repository.dart' as _i383;
 import '../../features/notes/_barrel.dart' as _i204;
 import '../../features/notes/domain/usecases/usecases.dart' as _i308;
 import '../../features/notes/external/remote_data_source.dart' as _i231;
@@ -39,10 +44,18 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i492.LoadingOverlay>(() => _i492.LoadingOverlay());
     gh.lazySingleton<_i874.SecureStorageService>(
         () => _i874.SecureStorageService());
+    gh.singleton<_i264.IAuthRemoteDataSource>(
+        () => const _i52.AuthRemoteDataSourceImpl());
     gh.singleton<_i470.INoteRemoteDataSource>(
         () => const _i231.NoteRemoteDataSourceImpl());
+    gh.singleton<_i535.IAuthRepository>(
+        () => _i383.AuthRepositoryImpl(gh<_i264.IAuthRemoteDataSource>()));
     gh.singleton<_i204.INoteRepository>(
         () => _i197.NoteRepositoryImpl(gh<_i204.INoteRemoteDataSource>()));
+    gh.singleton<_i478.LoginUser>(
+        () => _i478.LoginUser(gh<_i535.IAuthRepository>()));
+    gh.singleton<_i478.LogoutUser>(
+        () => _i478.LogoutUser(gh<_i535.IAuthRepository>()));
     gh.singleton<_i308.SendAudioFileTask>(
         () => _i308.SendAudioFileTask(gh<_i204.INoteRepository>()));
     gh.singleton<_i308.SendYoutubeTask>(

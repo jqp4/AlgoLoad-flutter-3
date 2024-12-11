@@ -33,7 +33,7 @@ class SecureStorageService {
     return value as T;
   }
 
-  Future<void> cleanStorage(String key) async {
+  Future<void> deleteValue(String key) async {
     _log.info('Deleting value by key $key...');
 
     await _storage.delete(key: key);

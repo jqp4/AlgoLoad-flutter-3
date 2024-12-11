@@ -135,9 +135,9 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('AlgoLoad Flutter 3'),
-      ),
+      // appBar: AppBar(
+      //   title: const Text('AlgoLoad Flutter 3'),
+      // ),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         children: [

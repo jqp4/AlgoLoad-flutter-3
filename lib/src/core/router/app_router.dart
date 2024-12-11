@@ -9,8 +9,6 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
         // AutoRoute(page: OnboardingRoute.page, path: '/', initial: true),
-        // // TODO:
-        // // AutoRoute(page: PaymentRoute.page, path: '/payment'),
 
         // AutoRoute(page: SettingsRoute.page, path: '/settings'),
         // AutoRoute(page: NotesListRoute.page, path: '/notesList'),
@@ -21,9 +19,14 @@ class AppRouter extends RootStackRouter {
         // AutoRoute(page: CreateNoteWithAudioFileRoute.page, path: '/createNote/audioFile/'),
 
         AutoRoute(
+          page: LoginRoute.page,
+          path: '/login/',
+          initial: true,
+        ),
+
+        AutoRoute(
           page: CreateNoteWithAudioRecordRoute.page,
           path: '/createNote/audioRecord/',
-          initial: true,
         ),
       ];
 }
