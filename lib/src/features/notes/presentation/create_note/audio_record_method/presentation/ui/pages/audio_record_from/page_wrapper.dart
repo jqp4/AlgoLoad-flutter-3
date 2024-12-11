@@ -21,7 +21,7 @@ class CreateNoteWithAudioRecordPage extends StatelessWidget {
     const fineStatusCodes = [302, 200];
 
     final response = await client.post(
-      '/login',
+      '/app/login',
       body: {
         'username': username,
         'password': password,
@@ -29,7 +29,7 @@ class CreateNoteWithAudioRecordPage extends StatelessWidget {
       },
     );
 
-    final rawData = response.data.toString();
+    final rawData = response.data;
     final logData = '(${response.statusCode}): <${rawData.runtimeType}>$rawData';
 
     if (!fineStatusCodes.contains(response.statusCode)) {
@@ -63,10 +63,10 @@ class CreateNoteWithAudioRecordPage extends StatelessWidget {
     const fineStatusCodes = [200];
 
     final response = await client.get(
-      '/receive_task',
+      '/app/receive_task',
     );
 
-    final rawData = response.data.toString();
+    final rawData = response.data;
     final logData = '(${response.statusCode}): <${rawData.runtimeType}>$rawData';
 
     if (!fineStatusCodes.contains(response.statusCode)) {
@@ -80,12 +80,7 @@ class CreateNoteWithAudioRecordPage extends StatelessWidget {
     final msg = 'Response $logData';
     log.finest(msg);
 
-    // /static/AlgoViewPage
-    final ind0 = rawData.indexOf('/static/AlgoViewPage');
-    final ind1 = rawData.indexOf('.json', ind0) + 5;
-    final algoviewUrl = (ind0 < 0 || ind1 < 0) ? 'null' : rawData.substring(ind0, ind1);
-
-    log.info('algoviewUrl: $algoviewUrl');
+    log.info(rawData['algoview_static_link']);
   }
 
   @override

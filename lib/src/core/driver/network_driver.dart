@@ -20,9 +20,6 @@ class NetworkDriver {
 
   void init() {
     _dio.options
-      // ..extra = {
-      //   'withCredentials': true,
-      // }
       ..baseUrl = rootUrl
       // ..followRedirects = false
       ..connectTimeout = const Duration(seconds: 5)
@@ -30,9 +27,13 @@ class NetworkDriver {
       ..validateStatus = (status) {
         return status != null && status > 0;
       }
+      // ..extra = {
+      //   'withCredentials': true,
+      // }
       ..headers = {
-        HttpHeaders.userAgentHeader: 'dio',
-        HttpHeaders.contentTypeHeader: 'application/x-www-form-urlencoded',
+        if (!kIsWeb) HttpHeaders.userAgentHeader: 'dio',
+        // HttpHeaders.contentTypeHeader: 'application/x-www-form-urlencoded',
+        HttpHeaders.contentTypeHeader: 'application/json',
       };
 
     if (kIsWeb) {
@@ -63,11 +64,6 @@ class NetworkDriver {
     String url, {
     Map<String, dynamic> body = const {},
   }) async {
-    // final rawData = <String, dynamic>{
-    //   // 'clientToken': await _getAccessToken(),
-    // }..addAll(body);
-    // return dio.post(url, data: rawData);
-
     return _dio.post(url, data: body);
   }
 
