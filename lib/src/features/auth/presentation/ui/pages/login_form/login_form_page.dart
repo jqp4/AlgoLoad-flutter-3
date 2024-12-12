@@ -52,6 +52,7 @@ class _LoginFormPageState extends State<LoginFormPage> {
 
     return Material(
       color: backgroundColor,
+      // todo: сделать что то с InkWell, потому что в вебе он везде предлагает тыкнуть
       child: InkWell(
         onTap: () {
           // Убираем фокус с полей ввода

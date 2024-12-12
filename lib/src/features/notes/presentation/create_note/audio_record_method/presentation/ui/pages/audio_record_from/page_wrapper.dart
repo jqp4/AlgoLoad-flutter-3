@@ -95,47 +95,68 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
       appBar: AppBar(
         title: const Text('AlgoLoad Flutter 3'),
       ),
-      body: ListView(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 32),
-        children: [
-          if (_task != null) ...[
-            AlgoViewWebViewContainer(
-              algoViewFullUrl: _task!.algoviewFullUrl,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.7,
             ),
-            const SizedBox(height: 32),
-            const Text('Graph source code'),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _codeController,
-              minLines: 20,
-              maxLines: 50,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            ),
-            const SizedBox(height: 32),
-          ],
+            child: Column(
+              children: [
+                if (_task != null) ...[
+                  AlgoViewWebViewContainer(
+                    algoViewFullUrl: _task!.algoviewFullUrl,
+                  ),
+                  const SizedBox(height: 32),
+                  const Text('Graph source code'),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: _codeController,
+                    minLines: 20,
+                    maxLines: 50,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                ],
 
-          // todo: move to profile
-          // Sing out (tmp)
-          MyButton(
-            title: 'Sing out',
-            onPressed: () {
-              AuthBloc().add(const AuthEvent.logout());
-              Future.delayed(
-                const Duration(milliseconds: 150),
-                () {
-                  context.router
-                    ..popUntilRoot()
-                    ..replace(const LoginRoute());
-                },
-              );
-            },
+                UnconstrainedBox(
+                  child: MyButton(
+                    title: 'Upload',
+                    onPressed: () {
+                      // ...
+                    },
+                  ),
+                ),
+                const Gap.y(32),
+
+                // todo: move to profile
+                // Sing out (tmp)
+                UnconstrainedBox(
+                  child: MyButton(
+                    title: 'Sing out',
+                    onPressed: () {
+                      AuthBloc().add(const AuthEvent.logout());
+                      Future.delayed(
+                        const Duration(milliseconds: 150),
+                        () {
+                          context.router
+                            ..popUntilRoot()
+                            ..replace(const LoginRoute());
+                        },
+                      );
+                    },
+                  ),
+                ),
+                const Gap.y(32),
+              ],
+            ),
           ),
-          const Gap.y(32),
-        ],
+        ),
       ),
     );
 
@@ -189,7 +210,7 @@ class AlgoViewWebViewContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.6,
+        maxHeight: MediaQuery.of(context).size.height * 0.7,
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8),
