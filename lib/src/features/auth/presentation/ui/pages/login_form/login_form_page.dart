@@ -33,9 +33,6 @@ class _LoginFormPageState extends State<LoginFormPage> {
 
     _theme = context.theme;
     _bloc = context.watch<AuthBloc>();
-
-    // _userNameFormController.text = _bloc.form.userName;
-    // _passwordFormController.text = _bloc.form.userPassword;
   }
 
   @override

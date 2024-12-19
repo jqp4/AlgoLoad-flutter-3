@@ -67,29 +67,54 @@ class NetworkDriver {
     return _dio.post(url, data: body);
   }
 
-  /// Sending a POST request with a file. On the current server,
-  /// this request type has header.contentType = 'multipart/form-data'.
+  /// Sending a POST request with a file, created from string.
+  /// On the current server, this request type has header.contentType = 'multipart/form-data'.
+  /// The request body is passed to dio as an object of the FormData class.
+  Future<Response> uploadFileFromString(
+    String url, {
+    required String fileName,
+    required String fileFieldName,
+    required String fileData,
+    Map<String, dynamic> body = const {},
+  }) async {
+    final fileExtension = fileName.split('.').last;
+
+    final data = <String, dynamic>{}
+      ..addAll(body)
+      ..addAll({
+        fileFieldName: MultipartFile.fromString(
+          fileData,
+          filename: fileName,
+          contentType: MediaType('multipart/form-data', fileExtension),
+        ),
+      });
+
+    final formData = FormData.fromMap(data);
+    return _dio.post(url, data: formData);
+  }
+
+  // todo: сейчас не работает из-за MultipartFile.fromFile
+  /// Sending a POST request with a file.
+  /// On the current server, this request type has header.contentType = 'multipart/form-data'.
   /// The request body is passed to dio as an object of the FormData class.
   Future<Response> uploadFile(
-    String url,
-    String filePath, {
+    String url, {
+    required String filePath,
+    required String fileFieldName,
     Map<String, dynamic> body = const {},
   }) async {
     final fileName = filePath.split('/').last;
     final fileExtension = filePath.split('.').last;
 
-    final rawData = <String, dynamic>{
-      // 'clientToken': await _getAccessToken(),
-    }..addAll(body);
-
-    final data = <String, dynamic>{
-      'jsonData': json.encode(rawData),
-      'file': await MultipartFile.fromFile(
-        filePath,
-        filename: fileName,
-        contentType: MediaType('audio/mpeg', fileExtension),
-      ),
-    };
+    final data = <String, dynamic>{}
+      ..addAll(body)
+      ..addAll({
+        fileFieldName: await MultipartFile.fromFile(
+          filePath,
+          filename: fileName,
+          contentType: MediaType('multipart/form-data', fileExtension),
+        ),
+      });
 
     final formData = FormData.fromMap(data);
     return _dio.post(url, data: formData);

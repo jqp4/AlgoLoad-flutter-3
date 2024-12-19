@@ -1,11 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
 import 'package:notes_app_with_ai/src/core/_barrel.dart';
 import 'package:notes_app_with_ai/src/features/auth/_barrel.dart';
 
-class AlgoViewComplitedTask {
-  AlgoViewComplitedTask({
+enum GraphSourceConfigType { xml, json, cpp }
+
+class ComplitedTask {
+  const ComplitedTask({
     required this.userComment,
     required this.graphSourceConfig,
     required this.algoviewStaticLink,
@@ -18,41 +21,118 @@ class AlgoViewComplitedTask {
   final String algoviewStaticLink;
   final String jsonGraphDataLink;
   final String algoviewFullUrl;
+
+  // todo: type
+  // final GraphSourceConfigType graphSourceConfigType;
+
+  // todo: copyWith
+}
+
+class NewTask {
+  const NewTask({
+    required this.userComment,
+    required this.graphSourceConfig,
+    required this.graphSourceConfigType,
+  });
+
+  final String userComment;
+  final String graphSourceConfig;
+  final GraphSourceConfigType graphSourceConfigType;
+
+  // todo: copyWith
+
+  NewTask copyWith({
+    String? userComment,
+    String? graphSourceConfig,
+    GraphSourceConfigType? graphSourceConfigType,
+  }) {
+    return NewTask(
+      userComment: userComment ?? this.userComment,
+      graphSourceConfig: graphSourceConfig ?? this.graphSourceConfig,
+      graphSourceConfigType: graphSourceConfigType ?? this.graphSourceConfigType,
+    );
+  }
 }
 
 @RoutePage()
 class CreateNoteWithAudioRecordPage extends StatefulWidget {
-  const CreateNoteWithAudioRecordPage({
-    // required this.notesBloc,
-    super.key,
-  });
-
-  // final NotesBloc notesBloc;
+  const CreateNoteWithAudioRecordPage({super.key});
 
   @override
   State<CreateNoteWithAudioRecordPage> createState() => _CreateNoteWithAudioRecordPageState();
 }
 
 class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecordPage> {
-  AlgoViewComplitedTask? _task;
   final _codeController = TextEditingController();
+
+  ComplitedTask? _complitedTask;
+  NewTask? _newTask;
 
   @override
   void initState() {
     super.initState();
 
-    _receiveTask().then(
-      (task) {
-        if (!mounted) return;
-        setState(() {
-          _task = task;
-          _codeController.text = _task!.graphSourceConfig;
-        });
-      },
-    );
+    _receiveTask();
   }
 
-  Future<AlgoViewComplitedTask> _receiveTask() async {
+  Future<void> _uploadTask() async {
+    if (!mounted) return;
+    setState(() {
+      _complitedTask = null;
+    });
+
+    await _uploadTaskRequest();
+  }
+
+  Future<void> _receiveTask() async {
+    final receivedTask = await _receiveTaskRequest();
+
+    if (!mounted) return;
+    setState(() {
+      _complitedTask = receivedTask;
+
+      _newTask = NewTask(
+        userComment: _complitedTask!.userComment,
+        graphSourceConfig: _complitedTask!.graphSourceConfig,
+        // todo:
+        graphSourceConfigType: GraphSourceConfigType.xml,
+      );
+
+      _codeController.text = _newTask!.graphSourceConfig;
+    });
+  }
+
+  Future<void> _uploadTaskRequest() async {
+    final log = MyWebLogger('algoload_upload_task');
+    final client = inject<NetworkDriver>();
+    const fineStatusCodes = [200];
+
+    final response = await client.uploadFileFromString(
+      '/app/upload_task',
+      fileName: 'flutter_app_upload.xml', // todo
+      fileFieldName: 'file_data',
+      fileData: _newTask?.graphSourceConfig ?? 'null',
+      body: {
+        'task_code': 'flutter_app',
+        'submit': 'Сгенерировать',
+      },
+    );
+
+    final rawData = response.data;
+    final logData = '(${response.statusCode}): <${rawData.runtimeType}>$rawData';
+
+    if (!fineStatusCodes.contains(response.statusCode)) {
+      final msg = 'ServerException: $logData';
+      log.severe(msg);
+
+      throw ServerException(description: msg);
+    }
+
+    final msg = 'Response $logData';
+    log.finest(msg);
+  }
+
+  Future<ComplitedTask> _receiveTaskRequest() async {
     final log = MyWebLogger('algoload_receive_task');
     final client = inject<NetworkDriver>();
     const fineStatusCodes = [200];
@@ -80,7 +160,7 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
 
     log.info('algoviewFullUrl: $algoviewFullUrl');
 
-    return AlgoViewComplitedTask(
+    return ComplitedTask(
       userComment: rawData['user_comment'],
       graphSourceConfig: rawData['graph_source_config'],
       algoviewStaticLink: rawData['algoview_static_link'],
@@ -104,9 +184,9 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
             ),
             child: Column(
               children: [
-                if (_task != null) ...[
+                if (_complitedTask != null) ...[
                   AlgoViewWebViewContainer(
-                    algoViewFullUrl: _task!.algoviewFullUrl,
+                    algoViewFullUrl: _complitedTask!.algoviewFullUrl,
                   ),
                   const SizedBox(height: 32),
                   const Text('Graph source code'),
@@ -120,6 +200,9 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
+                    onChanged: (value) {
+                      _newTask = _newTask?.copyWith(graphSourceConfig: value);
+                    },
                   ),
                   const SizedBox(height: 32),
                 ],
@@ -127,8 +210,9 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
                 UnconstrainedBox(
                   child: MyButton(
                     title: 'Upload',
-                    onPressed: () {
-                      // ...
+                    onPressed: () async {
+                      await _uploadTask();
+                      await _receiveTask();
                     },
                   ),
                 ),

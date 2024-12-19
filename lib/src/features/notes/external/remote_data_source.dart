@@ -15,7 +15,8 @@ final class NoteRemoteDataSourceImpl implements INoteRemoteDataSource {
 
     final response = await client.uploadFile(
       '/audio_task',
-      audioFilePath,
+      filePath: audioFilePath,
+      fileFieldName: 'file_data',
       body: {
         'lang': const NoteLanguageSerializer().toJson(language),
       },
