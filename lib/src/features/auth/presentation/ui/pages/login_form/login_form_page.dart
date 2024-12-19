@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes_app_with_ai/src/core/_barrel.dart';
 import 'package:notes_app_with_ai/src/features/auth/presentation/_barrel.dart';
 import 'package:notes_app_with_ai/src/foundation/extensoins/context.dart';
+import 'package:notes_app_with_ai/src/foundation/utils/debug_print.dart';
 
 // todo: remove
 // const username = 'kkk000';
@@ -46,6 +47,9 @@ class _LoginFormPageState extends State<LoginFormPage> {
   @override
   Widget build(BuildContext context) {
     final backgroundColor = _theme.colorScheme.surface;
+
+    // todo: remove
+    pprint('kkk000 zZ05w9IXqGbe');
 
     return Material(
       color: backgroundColor,

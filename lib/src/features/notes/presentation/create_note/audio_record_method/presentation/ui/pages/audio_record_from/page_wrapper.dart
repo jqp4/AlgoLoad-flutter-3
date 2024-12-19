@@ -39,8 +39,6 @@ class NewTask {
   final String graphSourceConfig;
   final GraphSourceConfigType graphSourceConfigType;
 
-  // todo: copyWith
-
   NewTask copyWith({
     String? userComment,
     String? graphSourceConfig,
@@ -71,7 +69,6 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
   @override
   void initState() {
     super.initState();
-
     _receiveTask();
   }
 
@@ -179,8 +176,9 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: Center(
           child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * 0.7,
+            constraints: const BoxConstraints(
+              // maxWidth: MediaQuery.of(context).size.width * 0.7,
+              maxWidth: 1200,
             ),
             child: Column(
               children: [
@@ -204,19 +202,29 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
                       _newTask = _newTask?.copyWith(graphSourceConfig: value);
                     },
                   ),
-                  const SizedBox(height: 32),
-                ],
-
-                UnconstrainedBox(
-                  child: MyButton(
-                    title: 'Upload',
-                    onPressed: () async {
-                      await _uploadTask();
-                      await _receiveTask();
-                    },
+                  const Gap.y(32),
+                  UnconstrainedBox(
+                    child: MyButton(
+                      title: 'Upload',
+                      onPressed: () async {
+                        await _uploadTask();
+                        await _receiveTask();
+                      },
+                    ),
                   ),
-                ),
-                const Gap.y(32),
+                  const Gap.y(32),
+                ] else ...[
+                  const Padding(
+                    padding: EdgeInsets.all(64.0),
+                    child: Column(
+                      children: [
+                        CircularProgressIndicator(),
+                        Gap.y(24.0),
+                        Text('Loading...'),
+                      ],
+                    ),
+                  ),
+                ],
 
                 // todo: move to profile
                 // Sing out (tmp)
