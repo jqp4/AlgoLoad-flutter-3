@@ -1,3 +1,3 @@
 class BuisinessConstants {
-  static const notesRefetchDelayDuration = Duration(seconds: 5);
+  static const pageAutoRefetchDelayDuration = Duration(seconds: 5);
 }

@@ -1,6 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
-import 'package:notes_app_with_ai/src/core/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 
 class AudioFilePicker {
   const AudioFilePicker();

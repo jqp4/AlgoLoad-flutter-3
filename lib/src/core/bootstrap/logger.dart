@@ -1,4 +1,4 @@
-// import 'package:notes_app_with_ai/src/core/_barrel.dart';
+// import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 
 // Future<void> configureLogger(
 //   AppBuildType appBuildType,

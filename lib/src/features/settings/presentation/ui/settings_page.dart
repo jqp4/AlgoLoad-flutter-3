@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:notes_app_with_ai/src/core/uikit/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/core/uikit/_barrel.dart';
 
 @RoutePage()
 class SettingsPage extends StatelessWidget {

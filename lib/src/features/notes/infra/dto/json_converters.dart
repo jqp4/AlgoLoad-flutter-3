@@ -1,6 +1,6 @@
+import 'package:algoload_flutter_web_app/src/features/notes/_barrel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:notes_app_with_ai/src/features/notes/_barrel.dart';
 
 class TimestampSerializer implements JsonConverter<DateTime, dynamic> {
   const TimestampSerializer();

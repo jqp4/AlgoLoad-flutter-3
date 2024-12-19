@@ -1,5 +1,5 @@
 // import 'package:freezed_annotation/freezed_annotation.dart';
-// import 'package:notes_app_with_ai/src/features/auth/domain/_barrel.dart';
+// import 'package:algoload_flutter_web_app/src/features/auth/domain/_barrel.dart';
 
 // part 'login_form_dto.freezed.dart';
 // // part 'login_form_dto.g.dart';

@@ -4,7 +4,7 @@ import 'dart:html' as html;
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:notes_app_with_ai/src/core/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 
 /// Authorizing Intersceptor. Inject accessToken to headers.authorization.
 class AuthInterceptor extends Interceptor {

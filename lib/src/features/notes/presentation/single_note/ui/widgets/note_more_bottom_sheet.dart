@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app_with_ai/src/core/_barrel.dart';
-import 'package:notes_app_with_ai/src/features/notes/presentation/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/features/notes/presentation/_barrel.dart';
 
 /// Menu for selecting actions on the note page.
 /// Appears by pressing the “more” button.

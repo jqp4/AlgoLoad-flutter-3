@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:notes_app_with_ai/src/core/_barrel.dart';
-import 'package:notes_app_with_ai/src/features/notes/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/features/notes/_barrel.dart';
 
 /// Menu for selecting how to create a new note on the notes list page.
 /// Appears by pressing the “New Note” button.

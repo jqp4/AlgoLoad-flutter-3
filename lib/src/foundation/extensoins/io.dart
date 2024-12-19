@@ -1,5 +1,5 @@
 import 'dart:io' as io;
-import 'package:notes_app_with_ai/src/core/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DirectoryInfo {

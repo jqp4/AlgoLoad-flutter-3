@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart' hide State;
 import 'package:injectable/injectable.dart';
-import 'package:notes_app_with_ai/src/core/error/_barrel.dart';
-import 'package:notes_app_with_ai/src/features/auth/domain/_barrel.dart';
-import 'package:notes_app_with_ai/src/features/auth/infra/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/core/error/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/features/auth/domain/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/features/auth/infra/_barrel.dart';
 
 @Singleton(as: IAuthRepository)
 class AuthRepositoryImpl implements IAuthRepository {

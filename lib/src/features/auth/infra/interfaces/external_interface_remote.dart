@@ -1,4 +1,4 @@
-import 'package:notes_app_with_ai/src/features/auth/domain/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/features/auth/domain/_barrel.dart';
 
 abstract interface class IAuthRemoteDataSource {
   Future<String> loginUser(LoginForm form);

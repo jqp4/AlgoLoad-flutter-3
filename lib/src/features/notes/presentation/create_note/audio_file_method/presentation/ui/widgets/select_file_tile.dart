@@ -1,8 +1,8 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:notes_app_with_ai/src/core/_barrel.dart';
-import 'package:notes_app_with_ai/src/foundation/extensoins/context.dart';
+import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/foundation/extensoins/context.dart';
 
 class SelectAudioFileTileButton extends StatefulWidget {
   const SelectAudioFileTileButton({

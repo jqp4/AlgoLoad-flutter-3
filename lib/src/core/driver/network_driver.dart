@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:injectable/injectable.dart';
-import 'package:notes_app_with_ai/src/core/driver/interceptors.dart';
+import 'package:algoload_flutter_web_app/src/core/driver/interceptors.dart';
 
 @singleton
 class NetworkDriver {

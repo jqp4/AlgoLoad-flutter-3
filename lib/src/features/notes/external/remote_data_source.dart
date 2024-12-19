@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
-import 'package:notes_app_with_ai/src/core/_barrel.dart';
-import 'package:notes_app_with_ai/src/features/notes/domain/_barrel.dart';
-import 'package:notes_app_with_ai/src/features/notes/infra/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/features/notes/domain/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/features/notes/infra/_barrel.dart';
 
 @Singleton(as: INoteRemoteDataSource)
 final class NoteRemoteDataSourceImpl implements INoteRemoteDataSource {

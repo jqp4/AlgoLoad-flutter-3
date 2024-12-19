@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:notes_app_with_ai/src/features/notes/domain/entities/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/features/notes/domain/entities/_barrel.dart';
 
 class Note {
   const Note({

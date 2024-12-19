@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart' hide State;
 import 'package:injectable/injectable.dart';
-import 'package:notes_app_with_ai/src/core/_barrel.dart';
-import 'package:notes_app_with_ai/src/features/auth/domain/_barrel.dart';
-import 'package:notes_app_with_ai/src/foundation/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/features/auth/domain/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/foundation/_barrel.dart';
 
 abstract class AuthUseCasePrototype {
   const AuthUseCasePrototype(this.authRepository);

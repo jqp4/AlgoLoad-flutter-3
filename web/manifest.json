@@ -1,6 +1,6 @@
 {
-    "name": "notes_app_with_ai",
-    "short_name": "notes_app_with_ai",
+    "name": "algoload_flutter_web_app",
+    "short_name": "algoload_flutter_web_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

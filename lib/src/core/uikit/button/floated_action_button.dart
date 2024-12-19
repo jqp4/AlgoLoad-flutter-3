@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app_with_ai/src/core/uikit/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/core/uikit/_barrel.dart';
 
 class MyFloatedActionButton extends StatelessWidget {
   const MyFloatedActionButton({

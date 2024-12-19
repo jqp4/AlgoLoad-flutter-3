@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app_with_ai/src/core/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -20,7 +20,7 @@ class _MyAppState extends State<MyApp> {
     final theme = brightness == Brightness.light ? materialTheme.light : materialTheme.dark;
 
     return MaterialApp.router(
-      title: 'Notes with AI',
+      title: 'AlgoLoad Flutter Web App',
       routerConfig: _appRouter.config(),
       theme: theme,
     );
