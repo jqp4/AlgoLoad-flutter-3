@@ -1,5 +1,5 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:algoload_flutter_web_app/src/features/notes/domain/_barrel.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'note_text_block_dto.freezed.dart';
 part 'note_text_block_dto.g.dart';

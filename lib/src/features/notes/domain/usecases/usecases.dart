@@ -1,7 +1,7 @@
-import 'package:dartz/dartz.dart' hide State;
-import 'package:injectable/injectable.dart';
 import 'package:algoload_flutter_web_app/src/core/error/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/features/notes/_barrel.dart';
+import 'package:dartz/dartz.dart' hide State;
+import 'package:injectable/injectable.dart';
 
 abstract class NoteUseCasePrototype {
   const NoteUseCasePrototype(this.noteRepository);

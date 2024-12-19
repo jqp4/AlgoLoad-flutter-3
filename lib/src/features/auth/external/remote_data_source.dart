@@ -1,7 +1,7 @@
-import 'package:injectable/injectable.dart';
 import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/features/auth/domain/entities/login_form.dart';
 import 'package:algoload_flutter_web_app/src/features/auth/infra/_barrel.dart';
+import 'package:injectable/injectable.dart';
 
 @Singleton(as: IAuthRemoteDataSource)
 final class AuthRemoteDataSourceImpl implements IAuthRemoteDataSource {

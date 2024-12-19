@@ -1,6 +1,6 @@
+import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
-import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 
 @lazySingleton
 class SecureStorageService {

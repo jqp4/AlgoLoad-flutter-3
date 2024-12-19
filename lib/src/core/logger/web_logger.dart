@@ -1,7 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
-import 'package:flutter/foundation.dart';
 import 'package:algoload_flutter_web_app/src/foundation/_barrel.dart';
+import 'package:flutter/foundation.dart';
 
 enum Level {
   FINEST,

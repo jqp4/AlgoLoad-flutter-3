@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/features/notes/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/foundation/extensoins/context.dart';
+import 'package:flutter/material.dart';
 
 class SelectLanguageTileButton extends StatelessWidget {
   const SelectLanguageTileButton({

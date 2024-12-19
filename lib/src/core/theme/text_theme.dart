@@ -1,6 +1,6 @@
+import 'package:algoload_flutter_web_app/src/foundation/extensoins/context.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:algoload_flutter_web_app/src/foundation/extensoins/context.dart';
 
 /// Use with Google Fonts package to use downloadable fonts
 TextTheme createTextTheme(BuildContext context, String bodyFontString, String displayFontString) {

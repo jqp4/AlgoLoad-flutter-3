@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
+import 'package:flutter/material.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});

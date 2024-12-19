@@ -1,5 +1,5 @@
-import 'package:injectable/injectable.dart';
 import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
+import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 
 typedef AsyncFunc = Future<void> Function();

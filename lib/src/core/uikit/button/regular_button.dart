@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:algoload_flutter_web_app/src/core/uikit/_barrel.dart';
+import 'package:flutter/material.dart';
 
 class MyButton extends StatelessWidget {
   const MyButton({

@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/features/notes/domain/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/features/notes/presentation/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/foundation/_barrel.dart';
+import 'package:bloc/bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'bloc.freezed.dart';
 part 'event.part.dart';

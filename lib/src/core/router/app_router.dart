@@ -1,6 +1,6 @@
+import 'package:algoload_flutter_web_app/src/features/_barrel.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:algoload_flutter_web_app/src/features/_barrel.dart';
 
 part 'app_router.gr.dart';
 

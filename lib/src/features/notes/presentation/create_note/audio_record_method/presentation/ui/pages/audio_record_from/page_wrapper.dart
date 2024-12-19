@@ -1,9 +1,8 @@
+import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/features/auth/_barrel.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-
-import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
-import 'package:algoload_flutter_web_app/src/features/auth/_barrel.dart';
 
 enum GraphSourceConfigType { xml, json, cpp }
 

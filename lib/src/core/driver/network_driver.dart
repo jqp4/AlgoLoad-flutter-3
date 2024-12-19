@@ -1,12 +1,11 @@
-import 'dart:convert';
 import 'dart:io';
 
+import 'package:algoload_flutter_web_app/src/core/driver/interceptors.dart';
 import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:injectable/injectable.dart';
-import 'package:algoload_flutter_web_app/src/core/driver/interceptors.dart';
 
 @singleton
 class NetworkDriver {

@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/foundation/_barrel.dart';
+import 'package:flutter/material.dart';
 
 class BottomSheetListContent extends StatelessWidget {
   const BottomSheetListContent({
