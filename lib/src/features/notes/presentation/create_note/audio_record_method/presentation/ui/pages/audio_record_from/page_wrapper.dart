@@ -69,6 +69,16 @@ class NewTask {
   }
 }
 
+class UploadedConfigFileData {
+  const UploadedConfigFileData({
+    required this.fileContents,
+    required this.fileExtension,
+  });
+
+  final String fileContents;
+  final String fileExtension;
+}
+
 @RoutePage()
 class CreateNoteWithAudioRecordPage extends StatefulWidget {
   const CreateNoteWithAudioRecordPage({super.key});
@@ -184,7 +194,7 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
     );
   }
 
-  Future<String?> _uploadConfigFileFromComputer() async {
+  Future<UploadedConfigFileData> _uploadConfigFileFromComputer() async {
     try {
       // Open file picker dialog
       final result = await FilePicker.platform.pickFiles(
@@ -201,17 +211,29 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
           throw Exception('Invalid file type. Only XML, JSON, and CPP files are allowed.');
         }
 
+        String contents;
         // Read file contents
         if (file.bytes != null) {
           // For web platform
-          return String.fromCharCodes(file.bytes!);
+          contents = String.fromCharCodes(file.bytes!);
         } else if (file.path != null) {
           // For desktop/mobile platforms
-          final contents = await File(file.path!).readAsString();
-          return contents;
+          contents = await File(file.path!).readAsString();
+        } else {
+          contents = 'null';
+          // return null;
         }
+
+        return UploadedConfigFileData(
+          fileContents: contents,
+          fileExtension: extension!,
+        );
       }
-      return null;
+      // todo: remove
+      return const UploadedConfigFileData(
+        fileContents: 'null',
+        fileExtension: 'xml',
+      );
     } catch (e) {
       debugPrint('Error uploading file: $e');
       rethrow;
@@ -326,10 +348,13 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
                         child: MyButton(
                           title: 'Upload file',
                           onPressed: () async {
-                            final fileContents = await _uploadConfigFileFromComputer() ?? 'null';
+                            final fileData = await _uploadConfigFileFromComputer();
                             setState(() {
-                              _newTask = _newTask?.copyWith(graphSourceConfig: fileContents);
-                              _codeController.text = fileContents;
+                              _codeController.text = fileData.fileContents;
+                              _newTask = _newTask?.copyWith(
+                                graphSourceConfig: fileData.fileContents,
+                                graphSourceConfigType: stringToGraphSourceConfigType(fileData.fileExtension),
+                              );
                             });
 
                             await _uploadTask();
