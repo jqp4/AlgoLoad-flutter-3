@@ -4,7 +4,21 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
-enum GraphSourceConfigType { xml, json, cpp }
+enum GraphSourceConfigType { xml, json, cpp, unknown }
+
+GraphSourceConfigType stringToGraphSourceConfigType(String? value) {
+  switch (value) {
+    case 'xml':
+      return GraphSourceConfigType.xml;
+    case 'json':
+      return GraphSourceConfigType.json;
+    case 'cpp':
+      return GraphSourceConfigType.cpp;
+    default:
+      // throw Exception('Unknown GraphSourceConfigType: $value');
+      return GraphSourceConfigType.unknown;
+  }
+}
 
 class ComplitedTask {
   const ComplitedTask({
@@ -13,6 +27,7 @@ class ComplitedTask {
     required this.algoviewStaticLink,
     required this.jsonGraphDataLink,
     required this.algoviewFullUrl,
+    required this.graphSourceConfigType,
   });
 
   final String userComment;
@@ -22,7 +37,7 @@ class ComplitedTask {
   final String algoviewFullUrl;
 
   // todo: type
-  // final GraphSourceConfigType graphSourceConfigType;
+  final GraphSourceConfigType graphSourceConfigType;
 
   // todo: copyWith
 }
@@ -159,6 +174,7 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
     return ComplitedTask(
       userComment: rawData['user_comment'],
       graphSourceConfig: rawData['graph_source_config'],
+      graphSourceConfigType: stringToGraphSourceConfigType(rawData['graph_source_type']),
       algoviewStaticLink: rawData['algoview_static_link'],
       jsonGraphDataLink: rawData['json_graph_data_link'],
       algoviewFullUrl: algoviewFullUrl,
@@ -186,7 +202,7 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
                     algoViewFullUrl: _complitedTask!.algoviewFullUrl,
                   ),
                   const SizedBox(height: 32),
-                  const Text('Graph source code'),
+                  Text('Graph source code (${_complitedTask!.graphSourceConfigType.name})'),
                   const SizedBox(height: 8),
                   TextField(
                     controller: _codeController,
