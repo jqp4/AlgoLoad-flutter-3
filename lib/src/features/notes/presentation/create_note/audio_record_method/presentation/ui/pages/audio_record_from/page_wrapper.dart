@@ -120,7 +120,8 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
 
     final response = await client.uploadFileFromString(
       '/app/upload_task',
-      fileName: 'flutter_app_upload.xml', // todo
+      // fileName: 'flutter_app_upload.xml', // todo
+      fileName: 'flutter_app_upload.${_newTask?.graphSourceConfigType.name}',
       fileFieldName: 'file_data',
       fileData: _newTask?.graphSourceConfig ?? 'null',
       body: {
@@ -196,14 +197,68 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
               maxWidth: 1200,
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (_complitedTask != null) ...[
+                  Text(
+                    'User comment: ${_complitedTask!.userComment}',
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  const Gap.y(16),
                   AlgoViewWebViewContainer(
                     algoViewFullUrl: _complitedTask!.algoviewFullUrl,
                   ),
                   const SizedBox(height: 32),
-                  Text('Graph source code (${_complitedTask!.graphSourceConfigType.name})'),
-                  const SizedBox(height: 8),
+                  Text(
+                    'Graph source code',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const Gap.y(16),
+                  Row(
+                    children: [
+                      Text(
+                        'Config type:',
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                      const Gap.x(16),
+                      SegmentedButton<GraphSourceConfigType>(
+                        segments: const [
+                          ButtonSegment<GraphSourceConfigType>(
+                            value: GraphSourceConfigType.xml,
+                            label: Text('XML'),
+                          ),
+                          ButtonSegment<GraphSourceConfigType>(
+                            value: GraphSourceConfigType.json,
+                            label: Text('JSON'),
+                          ),
+                          ButtonSegment<GraphSourceConfigType>(
+                            value: GraphSourceConfigType.cpp,
+                            label: Text('CPP'),
+                          ),
+                        ],
+                        selected: {_newTask?.graphSourceConfigType ?? GraphSourceConfigType.xml},
+                        onSelectionChanged: (selection) {
+                          setState(() {
+                            _newTask = _newTask?.copyWith(
+                              graphSourceConfigType: selection.first,
+                            );
+                          });
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                            (states) {
+                              if (states.contains(WidgetState.selected)) {
+                                return Theme.of(context).colorScheme.primary;
+                              }
+                              return Colors.transparent;
+                            },
+                          ),
+                        ),
+                      ),
+                      const Gap.x(16),
+                    ],
+                  ),
+                  const Gap.y(16),
                   TextField(
                     controller: _codeController,
                     minLines: 20,
