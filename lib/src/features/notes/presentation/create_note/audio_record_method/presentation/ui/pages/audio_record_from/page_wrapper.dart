@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/features/auth/_barrel.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
@@ -105,8 +108,7 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
       _newTask = NewTask(
         userComment: _complitedTask!.userComment,
         graphSourceConfig: _complitedTask!.graphSourceConfig,
-        // todo:
-        graphSourceConfigType: GraphSourceConfigType.xml,
+        graphSourceConfigType: _complitedTask!.graphSourceConfigType,
       );
 
       _codeController.text = _newTask!.graphSourceConfig;
@@ -182,6 +184,40 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
     );
   }
 
+  Future<String?> _uploadConfigFileFromComputer() async {
+    try {
+      // Open file picker dialog
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['xml', 'json', 'cpp'],
+      );
+
+      if (result != null) {
+        final file = result.files.first;
+
+        // Validate file extension
+        final extension = file.extension?.toLowerCase();
+        if (extension != 'xml' && extension != 'json' && extension != 'cpp') {
+          throw Exception('Invalid file type. Only XML, JSON, and CPP files are allowed.');
+        }
+
+        // Read file contents
+        if (file.bytes != null) {
+          // For web platform
+          return String.fromCharCodes(file.bytes!);
+        } else if (file.path != null) {
+          // For desktop/mobile platforms
+          final contents = await File(file.path!).readAsString();
+          return contents;
+        }
+      }
+      return null;
+    } catch (e) {
+      debugPrint('Error uploading file: $e');
+      rethrow;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -209,19 +245,15 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
                     algoViewFullUrl: _complitedTask!.algoviewFullUrl,
                   ),
                   const SizedBox(height: 32),
-                  Text(
-                    'Graph source code',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const Gap.y(16),
                   Row(
                     children: [
                       Text(
-                        'Config type:',
-                        style: Theme.of(context).textTheme.titleSmall,
+                        'Graph source code (editable)',
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
-                      const Gap.x(16),
+                      const Spacer(),
                       SegmentedButton<GraphSourceConfigType>(
+                        showSelectedIcon: false,
                         segments: const [
                           ButtonSegment<GraphSourceConfigType>(
                             value: GraphSourceConfigType.xml,
@@ -255,7 +287,6 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
                           ),
                         ),
                       ),
-                      const Gap.x(16),
                     ],
                   ),
                   const Gap.y(16),
@@ -273,14 +304,40 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
                     },
                   ),
                   const Gap.y(32),
-                  UnconstrainedBox(
-                    child: MyButton(
-                      title: 'Upload',
-                      onPressed: () async {
-                        await _uploadTask();
-                        await _receiveTask();
-                      },
-                    ),
+                  Text(
+                    'Submit this ${_newTask?.graphSourceConfigType.name} code or upload the file from your computer:',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const Gap.y(16),
+                  Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      UnconstrainedBox(
+                        child: MyButton(
+                          title: 'Submit',
+                          onPressed: () async {
+                            await _uploadTask();
+                            await _receiveTask();
+                          },
+                        ),
+                      ),
+                      const Gap.x(48),
+                      UnconstrainedBox(
+                        child: MyButton(
+                          title: 'Upload file',
+                          onPressed: () async {
+                            final fileContents = await _uploadConfigFileFromComputer() ?? 'null';
+                            setState(() {
+                              _newTask = _newTask?.copyWith(graphSourceConfig: fileContents);
+                              _codeController.text = fileContents;
+                            });
+
+                            await _uploadTask();
+                            await _receiveTask();
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                   const Gap.y(32),
                 ] else ...[
@@ -295,6 +352,12 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
                     ),
                   ),
                 ],
+
+                Text(
+                  'tmp:',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const Gap.y(16),
 
                 // todo: move to profile
                 // Sing out (tmp)
