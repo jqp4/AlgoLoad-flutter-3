@@ -3,9 +3,14 @@ import 'dart:io';
 import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/features/auth/_barrel.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:code_text_field/code_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_highlight/theme_map.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:highlight/languages/cpp.dart' as cpp_lang;
+import 'package:highlight/languages/json.dart' as json_lang;
+import 'package:highlight/languages/xml.dart' as xml_lang;
 
 enum GraphSourceConfigType { xml, json, cpp, unknown }
 
@@ -88,7 +93,7 @@ class CreateNoteWithAudioRecordPage extends StatefulWidget {
 }
 
 class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecordPage> {
-  final _codeController = TextEditingController();
+  final _codeController = CodeController();
 
   ComplitedTask? _complitedTask;
   NewTask? _newTask;
@@ -120,6 +125,8 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
         graphSourceConfig: _complitedTask!.graphSourceConfig,
         graphSourceConfigType: _complitedTask!.graphSourceConfigType,
       );
+
+      _updateCodeControllerLanguage();
 
       _codeController.text = _newTask!.graphSourceConfig;
     });
@@ -240,6 +247,14 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
     }
   }
 
+  void _updateCodeControllerLanguage() {
+    _codeController.language = _newTask!.graphSourceConfigType == GraphSourceConfigType.xml
+        ? xml_lang.xml
+        : _newTask!.graphSourceConfigType == GraphSourceConfigType.json
+            ? json_lang.json
+            : cpp_lang.cpp;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -296,6 +311,8 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
                             _newTask = _newTask?.copyWith(
                               graphSourceConfigType: selection.first,
                             );
+
+                            _updateCodeControllerLanguage();
                           });
                         },
                         style: ButtonStyle(
@@ -312,19 +329,37 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
                     ],
                   ),
                   const Gap.y(16),
-                  TextField(
-                    controller: _codeController,
-                    minLines: 20,
-                    maxLines: 50,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
+                  CodeTheme(
+                    data: CodeThemeData(
+                        styles: themeMap[Theme.of(context).brightness == Brightness.dark ? 'monokai' : 'a11y-light']!),
+                    child: CodeField(
+                      controller: _codeController,
+                      minLines: 20,
+                      maxLines: 50,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Theme.of(context).colorScheme.outline),
                         borderRadius: BorderRadius.circular(8),
                       ),
+                      expands: false,
+                      textStyle: const TextStyle(
+                        fontFamily: 'Courier New',
+                        fontSize: 16,
+                      ),
+                      lineNumberStyle: LineNumberStyle(
+                        textStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.outline,
+                          fontSize: 16,
+                        ),
+                        width: 50,
+                        margin: 15,
+                      ),
+                      onChanged: (value) {
+                        _newTask = _newTask?.copyWith(graphSourceConfig: value);
+                      },
                     ),
-                    onChanged: (value) {
-                      _newTask = _newTask?.copyWith(graphSourceConfig: value);
-                    },
                   ),
+
+                  // Submition
                   const Gap.y(32),
                   Text(
                     'Submit this ${_newTask?.graphSourceConfigType.name} code or upload the file from your computer:',
