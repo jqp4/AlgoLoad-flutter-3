@@ -15,24 +15,24 @@ class NetworkDriver {
 
   // TODO: move to env
   //static const String rootUrl = 'http://localhost:3001/';
-  static const String rootUrl = 'https://algoload.parallel.ru/';
+  static const String rootUrl = 'http://algoload.parallel.ru/';
 
   void init() {
     _dio.options
       ..baseUrl = rootUrl
-      // ..followRedirects = false
+      ..followRedirects = true
       ..connectTimeout = const Duration(seconds: 5)
       ..receiveTimeout = const Duration(seconds: 5)
       ..validateStatus = (status) {
         return status != null && status > 0;
       }
-      // ..extra = {
-      //   'withCredentials': true,
-      // }
+      ..extra = {'withCredentials': true}
       ..headers = {
         if (!kIsWeb) HttpHeaders.userAgentHeader: 'dio',
-        // HttpHeaders.contentTypeHeader: 'application/x-www-form-urlencoded',
         HttpHeaders.contentTypeHeader: 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Origin, Content-Type'
       };
 
     if (kIsWeb) {
