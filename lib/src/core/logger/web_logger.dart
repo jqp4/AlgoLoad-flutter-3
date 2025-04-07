@@ -36,7 +36,9 @@ class MyWebLogger {
   int get _timestamp => MyWebLoggerUtils.nowTimestamp - config.initialTimestamp;
 
   void _log(Level level, String message, [Object? error, StackTrace? stackTrace]) {
-    if (!kDebugMode) return;
+    // todo: undo
+    // Убираем проверку на kDebugMode, чтобы логи отображались всегда
+    // if (!kDebugMode) return;
 
     final timestamp = _timestamp;
     final errorStr = error == null ? '' : '\nError: $error';

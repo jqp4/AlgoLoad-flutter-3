@@ -1,6 +1,7 @@
 import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/features/auth/domain/entities/login_form.dart';
 import 'package:algoload_flutter_web_app/src/features/auth/infra/_barrel.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 
 @Singleton(as: IAuthRemoteDataSource)
@@ -76,6 +77,9 @@ final class AuthRemoteDataSourceImpl implements IAuthRemoteDataSource {
 
   @override
   Future<void> storeSessionToken(String sessionToken) async {
+    // todo: облагородить для web
+    if (kIsWeb) return;
+
     await inject<SecureStorageService>().addValue<String>(
       SecureStorageConstants.accessTokenKey,
       sessionToken,
@@ -84,6 +88,9 @@ final class AuthRemoteDataSourceImpl implements IAuthRemoteDataSource {
 
   @override
   Future<void> deleteSessionToken() async {
+    // todo: облагородить для web
+    if (kIsWeb) return;
+
     await inject<SecureStorageService>().deleteValue(
       SecureStorageConstants.accessTokenKey,
     );

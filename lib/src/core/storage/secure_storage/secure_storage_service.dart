@@ -1,12 +1,23 @@
 import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 @lazySingleton
 class SecureStorageService {
-  final FlutterSecureStorage _storage = const FlutterSecureStorage(
-    aOptions: AndroidOptions(encryptedSharedPreferences: true),
-  );
+  SecureStorageService()
+      : _storage = const FlutterSecureStorage(
+          webOptions: WebOptions(
+            dbName: 'AlgoLoadSecureStorage',
+            publicKey: 'AlgoLoadWebKey',
+          ),
+          aOptions: const AndroidOptions(
+            encryptedSharedPreferences: true,
+          ),
+          iOptions: const IOSOptions(),
+        );
+
+  final FlutterSecureStorage _storage;
 
   static final _log = MyWebLogger('SecureStorageService');
 
@@ -14,6 +25,8 @@ class SecureStorageService {
     _log.info('Adding value by key $key...');
 
     await _storage.write(key: key, value: value.toString());
+
+    _log.info('Value with key $key successfully added.');
   }
 
   Future<T?> getValue<T>(String key) async {

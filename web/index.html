@@ -34,6 +34,8 @@
 
   <title>algoload_flutter_web_app</title>
   <link rel="manifest" href="manifest.json">
+  <!-- Подключаем скрипт для перехвата print() из Dart в production-режиме -->
+  <script src="dart_print_override.js"></script>
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>
