@@ -75,7 +75,7 @@ class _LoginFormPageState extends State<LoginFormPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Sing in',
+                        'Sign in',
                         style: _theme.textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -103,7 +103,7 @@ class _LoginFormPageState extends State<LoginFormPage> {
 
                       const Gap.y(32),
                       MyButton(
-                        title: 'Sing in',
+                        title: 'Sign in',
                         isExpanded: true,
                         onPressed: () {
                           _bloc.add(const AuthEvent.submitLoginForm());
