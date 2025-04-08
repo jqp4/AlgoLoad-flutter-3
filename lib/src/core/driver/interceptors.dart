@@ -8,49 +8,34 @@ import 'package:flutter/foundation.dart';
 
 /// Authorizing Intersceptor. Inject accessToken to headers.authorization.
 class AuthInterceptor extends Interceptor {
-  String? _lastKnownCookie;
-
   @override
   Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    if (kIsWeb) {
-      final currentCookie = html.document.cookie;
-      if (currentCookie != _lastKnownCookie) {
-        _lastKnownCookie = currentCookie;
-      }
+    final accessToken = await _getAccessToken();
 
-      if (_lastKnownCookie != null && _lastKnownCookie!.isNotEmpty) {
-        options.headers['Cookie'] = _lastKnownCookie;
-      } else {
-        options.headers['Cookie'] = '123';
-      }
-    } else {
-      final storage = inject<SecureStorageService>();
-      final accessToken = await storage.getValue<String>(SecureStorageConstants.accessTokenKey);
-      if (accessToken != null && accessToken.isNotEmpty) {
-        options.headers['Cookie'] = accessToken;
-      }
+    if (accessToken != null && accessToken.isNotEmpty) {
+      // options.headers['Authorization'] = accessToken; // 'Bearer'
+
+      options.headers['Cookie'] = accessToken;
     }
 
     super.onRequest(options, handler);
   }
 
-  @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
-    if (kIsWeb) {
-      final cookies = response.headers['set-cookie'];
-      if (cookies != null && cookies.isNotEmpty) {
-        _lastKnownCookie = cookies[0].split(';')[0];
-      }
-    }
-    super.onResponse(response, handler);
-  }
+  Future<String?> _getAccessToken() async {
+    late final String? accessToken;
 
-  @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
-    if (kIsWeb && err.response?.statusCode == 401) {
-      _lastKnownCookie = null;
+    if (kIsWeb) {
+      // example of token
+      // session=.eJwlzjsOwjAMANC7ZGZw4m96mSpxbJW1pRPi7iDxTvDeZc8zrqNsr_OOR9mfq2wlY7rqmCvXqmEQgAGZ0d1CE51B1ZAkJgIEzyrVRLhP7FWjN1Cy3kfaVFLRpsuFKgs34gE-vWHrhuAZtQI60ZCxkp0MBwOUX-S-4vxvsHy-42QuuA.Z0h9GA.pt13d166lL-9w1aUPAs5ETuM6pA
+
+      final globalCookies = html.document.cookie;
+      accessToken = globalCookies?.split(';')[0];
+    } else {
+      final storage = inject<SecureStorageService>();
+      accessToken = await storage.getValue<String>(SecureStorageConstants.accessTokenKey);
     }
-    super.onError(err, handler);
+
+    return accessToken;
   }
 }
 
