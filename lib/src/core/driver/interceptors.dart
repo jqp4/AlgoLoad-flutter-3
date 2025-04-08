@@ -41,6 +41,7 @@ class AuthInterceptor extends Interceptor {
       final cookies = response.headers['set-cookie'];
       _log.info('Response headers: ${response.headers}');
       _log.info('Response cookies: $cookies');
+      _log.info('html.document.cookie: ${html.document.cookie}');
 
       if (cookies != null && cookies.isNotEmpty) {
         // Извлекаем сессионный токен из заголовка set-cookie

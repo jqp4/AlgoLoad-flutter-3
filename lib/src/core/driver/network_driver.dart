@@ -14,7 +14,7 @@ class NetworkDriver {
   final Dio _dio;
 
   // TODO: move to env
-  //static const String rootUrl = 'http://localhost:3001/';
+  // static const String rootUrl = 'http://localhost:3001/';
   static const String rootUrl = 'http://algoload.parallel.ru/';
 
   void init() {

@@ -138,7 +138,7 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
     const fineStatusCodes = [200];
 
     final response = await client.uploadFileFromString(
-      '/app/upload_task',
+      '/api/upload_task',
       // fileName: 'flutter_app_upload.xml', // todo
       fileName: 'flutter_app_upload.${_newTask?.graphSourceConfigType.name}',
       fileFieldName: 'file_data',
@@ -169,7 +169,7 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
     const fineStatusCodes = [200];
 
     final response = await client.get(
-      '/app/receive_task',
+      '/api/receive_task',
     );
 
     final rawData = response.data;

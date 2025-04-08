@@ -18,7 +18,7 @@ final class AuthRemoteDataSourceImpl implements IAuthRemoteDataSource {
     const fineStatusCodes = [302, 200]; // todo: remove 302 ?
 
     final response = await client.post(
-      '/app/login',
+      '/api/login',
       body: {
         'username': form.userName,
         'password': form.userPassword,
@@ -85,7 +85,7 @@ final class AuthRemoteDataSourceImpl implements IAuthRemoteDataSource {
     final client = inject<NetworkDriver>();
     const fineStatusCodes = [200];
 
-    final response = await client.get('/app/logout');
+    final response = await client.get('/api/logout');
 
     final rawData = response.data;
     final logData = '(${response.statusCode}): <${rawData.runtimeType}>$rawData';
