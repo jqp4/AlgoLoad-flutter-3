@@ -1,3 +1,6 @@
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
+
 import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/features/auth/domain/entities/login_form.dart';
 import 'package:algoload_flutter_web_app/src/features/auth/infra/_barrel.dart';
@@ -36,21 +39,20 @@ final class AuthRemoteDataSourceImpl implements IAuthRemoteDataSource {
     final msg = 'Response: $logData';
     log.finest(msg);
 
-    // todo: get real SessionToken
+    // Извлекаем сессионный токен из заголовка set-cookie
+    final responseCookies = response.headers['set-cookie'];
+    log.info('Response cookies: $responseCookies');
 
-    // final responseCookies = response.headers['set-cookie'];
-    // final maybeSessionToken = responseCookies?[0].split(';')[0];
+    final maybeSessionToken = responseCookies?[0].split(';')[0];
 
-    // if (maybeSessionToken == null) {
-    //   final errMsg = 'Session token is null. Response: $logData'; // . Headers: ${response.headers}
-    //   log.severe(errMsg);
-    //   throw ServerException(description: errMsg);
-    // }
+    if (maybeSessionToken == null) {
+      final errMsg = 'Session token is null. Response: $logData. Headers: ${response.headers}';
+      log.severe(errMsg);
+      throw ServerException(description: errMsg);
+    }
 
-    // log.finest('Session token: $maybeSessionToken');
-    // return maybeSessionToken;
-
-    return 'null';
+    log.finest('Session token: $maybeSessionToken');
+    return maybeSessionToken;
   }
 
   @override
@@ -77,8 +79,20 @@ final class AuthRemoteDataSourceImpl implements IAuthRemoteDataSource {
 
   @override
   Future<void> storeSessionToken(String sessionToken) async {
-    // todo: облагородить для web
-    if (kIsWeb) return;
+    final log = MyWebLogger('AuthRemoteDataSourceImpl.storeSessionToken');
+    log.info('Storing session token: $sessionToken');
+
+    if (kIsWeb) {
+      // Для веб-версии пытаемся установить cookie напрямую
+      try {
+        html.document.cookie = sessionToken;
+        log.info('Set document.cookie to: $sessionToken');
+        log.info('Current document.cookie after setting: ${html.document.cookie}');
+      } catch (e) {
+        log.severe('Error setting document.cookie: $e');
+      }
+      return;
+    }
 
     await inject<SecureStorageService>().addValue<String>(
       SecureStorageConstants.accessTokenKey,
@@ -89,7 +103,19 @@ final class AuthRemoteDataSourceImpl implements IAuthRemoteDataSource {
   @override
   Future<void> deleteSessionToken() async {
     // todo: облагородить для web
-    if (kIsWeb) return;
+    if (kIsWeb) {
+      final log = MyWebLogger('AuthRemoteDataSourceImpl.deleteSessionToken');
+      log.info('Deleting session token for web');
+
+      try {
+        // Устанавливаем пустое значение cookie или с истекшим сроком действия
+        html.document.cookie = 'session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        log.info('Session cookie deleted. Current document.cookie: ${html.document.cookie}');
+      } catch (e) {
+        log.severe('Error deleting document.cookie: $e');
+      }
+      return;
+    }
 
     await inject<SecureStorageService>().deleteValue(
       SecureStorageConstants.accessTokenKey,
