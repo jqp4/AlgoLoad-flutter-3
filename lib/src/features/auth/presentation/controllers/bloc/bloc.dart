@@ -76,7 +76,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (state is _Pending) return;
     emit(const _Pending());
 
-    _log.info('Catch _SubmitLoginForm event');
+    _log.info('Catch _TryAutoLogin event');
 
     final result = await inject<LoginUser>()(_form);
 

@@ -29,10 +29,7 @@ class NetworkDriver {
       ..extra = {'withCredentials': true}
       ..headers = {
         if (!kIsWeb) HttpHeaders.userAgentHeader: 'dio',
-        HttpHeaders.contentTypeHeader: 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Origin, Content-Type'
+        HttpHeaders.contentTypeHeader: 'application/x-www-form-urlencoded'
       };
 
     if (kIsWeb) {
