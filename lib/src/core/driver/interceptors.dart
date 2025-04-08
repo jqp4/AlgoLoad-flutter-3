@@ -12,6 +12,14 @@ class AuthInterceptor extends Interceptor {
   String? _lastKnownCookie;
   static final _log = MyWebLogger('AuthInterceptor');
 
+  // todo: remove
+  // Публичный метод для обновления последнего известного cookie
+  @Deprecated('cringe')
+  void updateLastKnownCookie(String? cookie) {
+    _log.info('Updating last known cookie to: $cookie');
+    _lastKnownCookie = cookie;
+  }
+
   @override
   Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     final accessToken = await _getAccessToken();
@@ -43,13 +51,13 @@ class AuthInterceptor extends Interceptor {
         _lastKnownCookie = sessionCookie;
 
         // Пытаемся установить cookie вручную
-        try {
-          html.document.cookie = sessionCookie;
-          _log.info('Manually set document.cookie to: $sessionCookie');
-          _log.info('Current document.cookie after setting: ${html.document.cookie}');
-        } catch (e) {
-          _log.severe('Error setting document.cookie: $e');
-        }
+        // try {
+        //   html.document.cookie = sessionCookie;
+        //   _log.info('Manually set document.cookie to: $sessionCookie');
+        //   _log.info('Current document.cookie after setting: ${html.document.cookie}');
+        // } catch (e) {
+        //   _log.severe('Error setting document.cookie: $e');
+        // }
       }
     }
 
@@ -82,7 +90,7 @@ class AuthInterceptor extends Interceptor {
 
       // Затем проверяем document.cookie
       final globalCookies = html.document.cookie;
-      _log.info('Current document.cookie: $globalCookies');
+      _log.info('!!! Current document.cookie: $globalCookies');
 
       if (globalCookies != null && globalCookies.isNotEmpty) {
         accessToken = globalCookies.split(';')[0];
