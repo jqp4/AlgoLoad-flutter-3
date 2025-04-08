@@ -59,7 +59,10 @@ final class AuthRemoteDataSourceImpl implements IAuthRemoteDataSource {
 
       final errMsg = 'Session token is null. Response: $logData. Headers: ${response.headers}';
       log.severe(errMsg);
-      throw ServerException(description: errMsg);
+
+      // todo: ???
+      // throw ServerException(description: errMsg);
+      return 'null';
     }
 
     // Извлекаем полный токен сессии из заголовка
@@ -72,7 +75,10 @@ final class AuthRemoteDataSourceImpl implements IAuthRemoteDataSource {
     if (maybeSessionToken.isEmpty) {
       final errMsg = 'Session token is empty. Response: $logData. Headers: ${response.headers}';
       log.severe(errMsg);
-      throw ServerException(description: errMsg);
+
+      // todo: ???
+      // throw ServerException(description: errMsg);
+      return 'null';
     }
 
     log.finest('Session token: $maybeSessionToken');
