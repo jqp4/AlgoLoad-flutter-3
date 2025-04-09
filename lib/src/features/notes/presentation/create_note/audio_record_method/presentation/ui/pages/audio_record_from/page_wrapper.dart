@@ -414,16 +414,16 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
                 ],
 
                 Text(
-                  'tmp:',
+                  'tmp profile block:',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const Gap.y(16),
 
-                // todo: move to profile
-                // Sing out (tmp)
+                // todo: move to profile page
+                // Sign out (tmp)
                 UnconstrainedBox(
                   child: MyButton(
-                    title: 'Sing out',
+                    title: 'Logout',
                     onPressed: () {
                       AuthBloc().add(const AuthEvent.logout());
                       Future.delayed(

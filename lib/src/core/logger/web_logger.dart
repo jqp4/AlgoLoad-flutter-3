@@ -45,14 +45,17 @@ class MyWebLogger {
     final traceStr = stackTrace == null ? '' : '\nTrace: $stackTrace';
 
     // 🟥 🟦 🟧 🟨 🟩 🟪 🟫 ⬛
+    // 🔴🟠🟡🟢🔵🟣⚫⚪🟤
+    // ☠️💀❌🛑⚠️❗🚨🔶🟠✅💬🚧ℹ️🧠
+
     final colorBlock = switch (level) {
-      Level.FINEST => '🟩',
-      Level.FINER => '🟩',
-      Level.FINE => '🟩',
-      Level.INFO => '🟪',
-      Level.WARNING => '🟧',
-      Level.SEVERE => '🟥',
-      Level.SHOUT => '⬛',
+      Level.FINEST => '✅',
+      Level.FINER => '✅',
+      Level.FINE => '✅',
+      Level.INFO => '🧠',
+      Level.WARNING => '⚠️',
+      Level.SEVERE => '🚨',
+      Level.SHOUT => '☠️',
     };
 
     final result = '$colorBlock [$name] ${level.name} T+$timestamp: $message$errorStr$traceStr';

@@ -75,7 +75,7 @@ class _LoginFormPageState extends State<LoginFormPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Sign in 123',
+                        'Sign in',
                         style: _theme.textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),

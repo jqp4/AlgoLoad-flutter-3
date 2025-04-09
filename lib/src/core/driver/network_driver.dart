@@ -15,7 +15,7 @@ class NetworkDriver {
 
   // TODO: move to env
   // static const String rootUrl = 'http://localhost:3001/';
-  static const String rootUrl = 'http://algoload.parallel.ru/';
+  static const String rootUrl = 'https://algoload.parallel.ru/';
 
   void init() {
     _dio.options
