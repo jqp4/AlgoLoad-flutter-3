@@ -331,7 +331,8 @@ class _CreateNoteWithAudioRecordPageState extends State<CreateNoteWithAudioRecor
                   const Gap.y(16),
                   CodeTheme(
                     data: CodeThemeData(
-                        styles: themeMap[Theme.of(context).brightness == Brightness.dark ? 'monokai' : 'a11y-light']!),
+                      styles: themeMap[Theme.of(context).brightness == Brightness.dark ? 'monokai' : 'a11y-light']!,
+                    ),
                     child: CodeField(
                       controller: _codeController,
                       minLines: 20,
@@ -497,26 +498,35 @@ class AlgoViewWebViewContainer extends StatelessWidget {
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height * 0.7,
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: InAppWebView(
-          initialUrlRequest: URLRequest(
-            url: WebUri(algoViewFullUrl),
-            // todo: auth???
-            // headers:
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border.all(color: Theme.of(context).colorScheme.outline),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(1),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(7),
+            child: InAppWebView(
+              initialUrlRequest: URLRequest(
+                url: WebUri(algoViewFullUrl),
+                // todo: auth???
+                // headers:
+              ),
+              onWebViewCreated: (controller) async {
+                _log.fine('onWebViewCreated');
+              },
+              onLoadStart: (controller, url) {
+                _log.fine('onLoadStart: $url');
+              },
+              onLoadStop: (controller, url) async {
+                _log.fine('onLoadStop: $url');
+              },
+              onProgressChanged: (controller, progress) {
+                _log.fine('onProgressChanged: $progress');
+              },
+            ),
           ),
-          onWebViewCreated: (controller) async {
-            _log.fine('onWebViewCreated');
-          },
-          onLoadStart: (controller, url) {
-            _log.fine('onLoadStart: $url');
-          },
-          onLoadStop: (controller, url) async {
-            _log.fine('onLoadStop: $url');
-          },
-          onProgressChanged: (controller, progress) {
-            _log.fine('onProgressChanged: $progress');
-          },
         ),
       ),
     );
