@@ -19,7 +19,8 @@ class SideMenuScaffold extends StatefulWidget {
 
 class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
-  late final Animation<double> _animation;
+  late final Animation<double> _slideAnimation;
+  late Animation<double> _scaleAnimation;
   static const double _menuWidth = 250.0;
   bool _isMenuOpen = false;
 
@@ -30,9 +31,21 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _animation = Tween<double>(
+    _slideAnimation = Tween<double>(
       begin: 0,
       end: _menuWidth,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: (MediaQuery.of(context).size.width - _menuWidth) / MediaQuery.of(context).size.width,
     ).animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
@@ -59,7 +72,7 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: _animation,
+      animation: Listenable.merge([_slideAnimation, _scaleAnimation]),
       builder: (context, child) {
         return Stack(
           children: [
@@ -136,8 +149,11 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
             ),
             // Основной контент
             Transform.translate(
-              offset: Offset(_animation.value, 0),
-              child: child,
+              offset: Offset(_slideAnimation.value, 0),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width - _slideAnimation.value,
+                child: child,
+              ),
             ),
           ],
         );

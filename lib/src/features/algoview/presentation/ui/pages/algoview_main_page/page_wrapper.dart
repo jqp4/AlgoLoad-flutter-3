@@ -143,7 +143,7 @@ class _AlgoViewMainPageState extends State<AlgoViewMainPage> {
           child: ConstrainedBox(
             constraints: const BoxConstraints(
               // maxWidth: MediaQuery.of(context).size.width * 0.7,
-              maxWidth: 1100,
+              maxWidth: 1000,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
