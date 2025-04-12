@@ -246,33 +246,29 @@ class _AlgoViewMainPageState extends State<AlgoViewMainPage> {
                   Row(
                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      UnconstrainedBox(
-                        child: MyButton(
-                          title: 'Submit',
-                          onPressed: () async {
-                            await _uploadTask();
-                            await _receiveTask();
-                          },
-                        ),
+                      MyOutlinedButton(
+                        title: 'Submit',
+                        onPressed: () async {
+                          await _uploadTask();
+                          await _receiveTask();
+                        },
                       ),
-                      const Gap.x(48),
-                      UnconstrainedBox(
-                        child: MyButton(
-                          title: 'Upload file',
-                          onPressed: () async {
-                            final fileData = await _uploadConfigFileFromComputer();
-                            setState(() {
-                              _codeController.text = fileData.fileContents;
-                              _newTask = _newTask?.copyWith(
-                                graphSourceConfig: fileData.fileContents,
-                                graphSourceConfigType: _stringToGraphSourceConfigType(fileData.fileExtension),
-                              );
-                            });
+                      const Gap.x(24),
+                      MyOutlinedButton(
+                        title: 'Upload file',
+                        onPressed: () async {
+                          final fileData = await _uploadConfigFileFromComputer();
+                          setState(() {
+                            _codeController.text = fileData.fileContents;
+                            _newTask = _newTask?.copyWith(
+                              graphSourceConfig: fileData.fileContents,
+                              graphSourceConfigType: _stringToGraphSourceConfigType(fileData.fileExtension),
+                            );
+                          });
 
-                            await _uploadTask();
-                            await _receiveTask();
-                          },
-                        ),
+                          await _uploadTask();
+                          await _receiveTask();
+                        },
                       ),
                     ],
                   ),

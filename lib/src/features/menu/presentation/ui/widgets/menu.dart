@@ -104,7 +104,7 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
                                 style: Theme.of(context).textTheme.headlineMedium,
                               ),
                               const Gap.y(32),
-                              SideMenuOptionButton(
+                              MyOutlinedButton(
                                 title: 'AlgoLoad',
                                 onPressed: () {
                                   toggleMenu();
@@ -112,7 +112,7 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
                                 },
                               ),
                               const Gap.y(16),
-                              SideMenuOptionButton(
+                              MyOutlinedButton(
                                 title: 'Reports',
                                 onPressed: () {
                                   toggleMenu();
@@ -121,7 +121,7 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
                                 },
                               ),
                               const Gap.y(16),
-                              SideMenuOptionButton(
+                              MyOutlinedButton(
                                 title: 'Help',
                                 onPressed: () {
                                   toggleMenu();
@@ -144,7 +144,7 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
                             ],
                           ),
                         ),
-                        SideMenuOptionButton(
+                        MyOutlinedButton(
                           title: 'Logout',
                           onPressed: () {
                             toggleMenu();
@@ -191,42 +191,6 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
             ),
           ),
           body: widget.body,
-        ),
-      ),
-    );
-  }
-}
-
-class SideMenuOptionButton extends StatelessWidget {
-  const SideMenuOptionButton({
-    required this.title,
-    required this.onPressed,
-    super.key,
-  });
-
-  final String title;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return OutlinedButton(
-      onPressed: onPressed,
-      style: OutlinedButton.styleFrom(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(50)),
-        ),
-        side: BorderSide(
-          color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black,
-          width: 1.0,
-        ),
-        backgroundColor: Colors.transparent,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      ),
-      child: Text(
-        title,
-        style: TextStyle(
-          color: Theme.of(context).textTheme.bodyLarge?.color,
-          fontWeight: FontWeight.w500,
         ),
       ),
     );

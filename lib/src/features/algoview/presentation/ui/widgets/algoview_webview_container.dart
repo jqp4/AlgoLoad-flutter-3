@@ -16,7 +16,7 @@ class AlgoViewWebViewContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.7,
+        maxHeight: MediaQuery.of(context).size.height * 0.6,
       ),
       child: DecoratedBox(
         decoration: BoxDecoration(
