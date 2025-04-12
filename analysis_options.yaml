@@ -12,3 +12,4 @@ analyzer:
     sort_pub_dependencies: ignore
     invalid_annotation_target: ignore # freezed code generation
     cascade_invocations: ignore # isar code generation
+    one_member_abstracts: ignore

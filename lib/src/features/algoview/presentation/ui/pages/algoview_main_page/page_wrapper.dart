@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/features/algoview/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/features/auth/_barrel.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:code_text_field/code_text_field.dart';
@@ -11,78 +12,6 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:highlight/languages/cpp.dart' as cpp_lang;
 import 'package:highlight/languages/json.dart' as json_lang;
 import 'package:highlight/languages/xml.dart' as xml_lang;
-
-enum GraphSourceConfigType { xml, json, cpp, unknown }
-
-GraphSourceConfigType stringToGraphSourceConfigType(String? value) {
-  switch (value) {
-    case 'xml':
-      return GraphSourceConfigType.xml;
-    case 'json':
-      return GraphSourceConfigType.json;
-    case 'cpp':
-      return GraphSourceConfigType.cpp;
-    default:
-      // throw Exception('Unknown GraphSourceConfigType: $value');
-      return GraphSourceConfigType.unknown;
-  }
-}
-
-class ComplitedTask {
-  const ComplitedTask({
-    required this.userComment,
-    required this.graphSourceConfig,
-    required this.algoviewStaticLink,
-    required this.jsonGraphDataLink,
-    required this.algoviewFullUrl,
-    required this.graphSourceConfigType,
-  });
-
-  final String userComment;
-  final String graphSourceConfig;
-  final String algoviewStaticLink;
-  final String jsonGraphDataLink;
-  final String algoviewFullUrl;
-
-  // todo: type
-  final GraphSourceConfigType graphSourceConfigType;
-
-  // todo: copyWith
-}
-
-class NewTask {
-  const NewTask({
-    required this.userComment,
-    required this.graphSourceConfig,
-    required this.graphSourceConfigType,
-  });
-
-  final String userComment;
-  final String graphSourceConfig;
-  final GraphSourceConfigType graphSourceConfigType;
-
-  NewTask copyWith({
-    String? userComment,
-    String? graphSourceConfig,
-    GraphSourceConfigType? graphSourceConfigType,
-  }) {
-    return NewTask(
-      userComment: userComment ?? this.userComment,
-      graphSourceConfig: graphSourceConfig ?? this.graphSourceConfig,
-      graphSourceConfigType: graphSourceConfigType ?? this.graphSourceConfigType,
-    );
-  }
-}
-
-class UploadedConfigFileData {
-  const UploadedConfigFileData({
-    required this.fileContents,
-    required this.fileExtension,
-  });
-
-  final String fileContents;
-  final String fileExtension;
-}
 
 @RoutePage()
 class AlgoViewMainPage extends StatefulWidget {
@@ -194,7 +123,7 @@ class _AlgoViewMainPageState extends State<AlgoViewMainPage> {
     return ComplitedTask(
       userComment: rawData['user_comment'],
       graphSourceConfig: rawData['graph_source_config'],
-      graphSourceConfigType: stringToGraphSourceConfigType(rawData['graph_source_type']),
+      graphSourceConfigType: _stringToGraphSourceConfigType(rawData['graph_source_type']),
       algoviewStaticLink: rawData['algoview_static_link'],
       jsonGraphDataLink: rawData['json_graph_data_link'],
       algoviewFullUrl: algoviewFullUrl,
@@ -253,6 +182,20 @@ class _AlgoViewMainPageState extends State<AlgoViewMainPage> {
         : _newTask!.graphSourceConfigType == GraphSourceConfigType.json
             ? json_lang.json
             : cpp_lang.cpp;
+  }
+
+  GraphSourceConfigType _stringToGraphSourceConfigType(String? value) {
+    switch (value) {
+      case 'xml':
+        return GraphSourceConfigType.xml;
+      case 'json':
+        return GraphSourceConfigType.json;
+      case 'cpp':
+        return GraphSourceConfigType.cpp;
+      default:
+        // throw Exception('Unknown GraphSourceConfigType: $value');
+        return GraphSourceConfigType.unknown;
+    }
   }
 
   @override
@@ -389,7 +332,7 @@ class _AlgoViewMainPageState extends State<AlgoViewMainPage> {
                               _codeController.text = fileData.fileContents;
                               _newTask = _newTask?.copyWith(
                                 graphSourceConfig: fileData.fileContents,
-                                graphSourceConfigType: stringToGraphSourceConfigType(fileData.fileExtension),
+                                graphSourceConfigType: _stringToGraphSourceConfigType(fileData.fileExtension),
                               );
                             });
 

@@ -1,7 +1,7 @@
 {
     "dart.lineLength": 125,
 
-    // _barrel files
+    // _barrel files (vscode)
     "dartBarrelFileGenerator.defaultBarrelName": "_barrel",
     "dartBarrelFileGenerator.skipEmpty": false,
     "dartBarrelFileGenerator.excludeFileList": [
@@ -13,5 +13,32 @@
         "**/*_ignore.dart",
         "**/*_event.dart",
         "**/*_state.dart"
+    ],
+
+    // _barrel files (trae)
+    "dart-barrel-file-generator.defaultBarrelName": "_barrel",
+    "dart-barrel-file-generator.skipEmpty": false,
+    "dart-barrel-file-generator.excludeFileList": [
+        "**/*.g.dart",
+        "**/*.gr.dart",
+        "**/*.gen.dart",
+        "**/*.part.dart",
+        "**/*.config.dart",
+        "**/*_ignore.dart",
+        "**/*_event.dart",
+        "**/*_state.dart"
     ]
+
+    //   "dartBarrel.files.disableRecursiveBarrelling": false,
+    //   "dartBarrel.files.includeExtensionOnExport": ["dart"],
+    //   "dartBarrel.files.ignoreFilePathPatternOnExport": ["**/*.freezed.dart", "**/*.g.dart"],
+    //   "dartBarrel.files.supportsHiddenFiles": true,
+    //   "dartBarrel.files.preserveGitignoreSettings": false,
+    //   "dartBarrel.files.enableClassExportDetection": true,
+    //   "dartBarrel.files.exportDefaultFilename": "barrel",
+    //   "dartBarrel.files.outputFilePrefix": "",
+    //   "dartBarrel.files.outputFileSuffix": "",
+    //   "dartBarrel.files.outputFileSeparator": "_",
+    //   "dartBarrel.formatting.endOfLine": "lf",
+    //   "dartBarrel.formatting.insertFinalNewline": true,
 }
