@@ -106,23 +106,41 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
                               const Gap.y(32),
                               SideMenuOptionButton(
                                 title: 'AlgoLoad',
-                                onPressed: toggleMenu,
+                                onPressed: () {
+                                  toggleMenu();
+                                  context.router.replace(const AlgoViewMainRoute());
+                                },
                               ),
                               const Gap.y(16),
                               SideMenuOptionButton(
                                 title: 'Reports',
-                                onPressed: toggleMenu,
+                                onPressed: () {
+                                  toggleMenu();
+                                  // todo: replace to reports page
+                                  context.router.replace(const AlgoViewMainRoute());
+                                },
                               ),
                               const Gap.y(16),
                               SideMenuOptionButton(
                                 title: 'Help',
-                                onPressed: toggleMenu,
+                                onPressed: () {
+                                  toggleMenu();
+                                  // todo: replace to help page
+                                  context.router.replace(const AlgoViewMainRoute());
+                                },
                               ),
-                              const Gap.y(16),
-                              SideMenuOptionButton(
-                                title: 'Old site',
-                                onPressed: toggleMenu,
-                              ),
+                              // проблемы с библиотекой url_launcher
+                              // const Gap.y(16),
+                              // SideMenuOptionButton(
+                              //   title: 'Old site',
+                              //   onPressed: () async {
+                              //     toggleMenu();
+                              //     final Uri url = Uri.parse('https://algoload.parallel.ru');
+                              //     if (await canLaunchUrl(url)) {
+                              //       await launchUrl(url, mode: LaunchMode.externalApplication);
+                              //     }
+                              //   },
+                              // ),
                             ],
                           ),
                         ),
