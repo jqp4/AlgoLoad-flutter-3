@@ -23,6 +23,8 @@ class AlgoViewMainPage extends StatefulWidget {
 class _AlgoViewMainPageState extends State<AlgoViewMainPage> {
   final _codeController = CodeController();
 
+  final _tmpRemoteDataSource = inject<IAlgoViewRemoteDataSource>();
+
   ComplitedTask? _complitedTask;
   NewTask? _newTask;
 
@@ -38,11 +40,14 @@ class _AlgoViewMainPageState extends State<AlgoViewMainPage> {
       _complitedTask = null;
     });
 
-    await _uploadTaskRequest();
+    await _tmpRemoteDataSource.uploadTask(
+      _newTask?.graphSourceConfig ?? 'null',
+      'flutter_app_upload.${_newTask?.graphSourceConfigType.name}',
+    );
   }
 
   Future<void> _receiveTask() async {
-    final receivedTask = await _receiveTaskRequest();
+    final receivedTask = await _tmpRemoteDataSource.receiveTask();
 
     if (!mounted) return;
     setState(() {
@@ -58,75 +63,6 @@ class _AlgoViewMainPageState extends State<AlgoViewMainPage> {
 
       _codeController.text = _newTask!.graphSourceConfig;
     });
-  }
-
-  Future<void> _uploadTaskRequest() async {
-    final log = MyWebLogger('algoload_upload_task');
-    final client = inject<NetworkDriver>();
-    const fineStatusCodes = [200];
-
-    final response = await client.uploadFileFromString(
-      '/api/upload_task',
-      // fileName: 'flutter_app_upload.xml', // todo
-      fileName: 'flutter_app_upload.${_newTask?.graphSourceConfigType.name}',
-      fileFieldName: 'file_data',
-      fileData: _newTask?.graphSourceConfig ?? 'null',
-      body: {
-        'task_code': 'flutter_app',
-        'submit': 'Сгенерировать',
-      },
-    );
-
-    final rawData = response.data;
-    final logData = '(${response.statusCode}): <${rawData.runtimeType}>$rawData';
-
-    if (!fineStatusCodes.contains(response.statusCode)) {
-      final msg = 'ServerException: $logData';
-      log.severe(msg);
-
-      throw ServerException(description: msg);
-    }
-
-    final msg = 'Response $logData';
-    log.finest(msg);
-  }
-
-  Future<ComplitedTask> _receiveTaskRequest() async {
-    final log = MyWebLogger('algoload_receive_task');
-    final client = inject<NetworkDriver>();
-    const fineStatusCodes = [200];
-
-    final response = await client.get(
-      '/api/receive_task',
-    );
-
-    final rawData = response.data;
-    final logData = '(${response.statusCode}): <${rawData.runtimeType}>$rawData';
-
-    if (!fineStatusCodes.contains(response.statusCode)) {
-      final msg = 'ServerException: $logData';
-      log.severe(msg);
-
-      throw ServerException(description: msg);
-    }
-
-    final msg = 'Response $logData';
-    log.finest(msg);
-
-    // http://localhost:3001/static/AlgoViewPage.html?jsonGraphDataUrl=/user/kkk000/Json_models/graphData.json
-    final algoviewFullUrl =
-        "${NetworkDriver.rootUrl}${rawData['algoview_static_link']}?jsonGraphDataUrl=${rawData['json_graph_data_link']}";
-
-    log.info('algoviewFullUrl: $algoviewFullUrl');
-
-    return ComplitedTask(
-      userComment: rawData['user_comment'],
-      graphSourceConfig: rawData['graph_source_config'],
-      graphSourceConfigType: _stringToGraphSourceConfigType(rawData['graph_source_type']),
-      algoviewStaticLink: rawData['algoview_static_link'],
-      jsonGraphDataLink: rawData['json_graph_data_link'],
-      algoviewFullUrl: algoviewFullUrl,
-    );
   }
 
   Future<UploadedConfigFileData> _uploadConfigFileFromComputer() async {

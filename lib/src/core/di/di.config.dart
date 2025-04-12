@@ -11,6 +11,11 @@
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
+import '../../features/algoview/domain/_barrel.dart' as _i914;
+import '../../features/algoview/domain/usecases/usecases.dart' as _i761;
+import '../../features/algoview/external/remote_data_source.dart' as _i93;
+import '../../features/algoview/infra/_barrel.dart' as _i931;
+import '../../features/algoview/infra/repository/repository.dart' as _i319;
 import '../../features/auth/domain/_barrel.dart' as _i535;
 import '../../features/auth/domain/usecases/usecases.dart' as _i478;
 import '../../features/auth/external/remote_data_source.dart' as _i52;
@@ -46,10 +51,16 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i492.LoadingOverlay>(() => _i492.LoadingOverlay());
     gh.lazySingleton<_i874.SecureStorageService>(
         () => _i874.SecureStorageService());
+    gh.singleton<_i931.IAlgoViewRemoteDataSource>(
+        () => const _i93.AlgoViewRemoteDataSourceImpl());
     gh.singleton<_i788.INoteRemoteDataSource>(
         () => const _i618.NoteRemoteDataSourceImpl());
+    gh.singleton<_i914.IAlgoViewRepository>(() =>
+        _i319.AlgoViewRepositoryImpl(gh<_i931.IAlgoViewRemoteDataSource>()));
     gh.singleton<_i264.IAuthRemoteDataSource>(
         () => const _i52.AuthRemoteDataSourceImpl());
+    gh.singleton<_i761.AlgoViewReciveTask>(
+        () => _i761.AlgoViewReciveTask(gh<_i914.IAlgoViewRepository>()));
     gh.singleton<_i723.INoteRepository>(
         () => _i754.NoteRepositoryImpl(gh<_i723.INoteRemoteDataSource>()));
     gh.singleton<_i635.SendAudioFileTask>(
