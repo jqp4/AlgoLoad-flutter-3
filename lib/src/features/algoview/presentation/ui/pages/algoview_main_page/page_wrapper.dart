@@ -8,7 +8,6 @@ import 'package:code_text_field/code_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_highlight/theme_map.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:highlight/languages/cpp.dart' as cpp_lang;
 import 'package:highlight/languages/json.dart' as json_lang;
 import 'package:highlight/languages/xml.dart' as xml_lang;
@@ -422,56 +421,5 @@ class _AlgoViewMainPageState extends State<AlgoViewMainPage> {
     //     },
     //   ),
     // );
-  }
-}
-
-class AlgoViewWebViewContainer extends StatelessWidget {
-  const AlgoViewWebViewContainer({
-    required this.algoViewFullUrl,
-    super.key,
-  });
-
-  final String algoViewFullUrl;
-
-  static final _log = MyWebLogger('algoview_webview_container');
-
-  @override
-  Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.7,
-      ),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          border: Border.all(color: Theme.of(context).colorScheme.outline),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(1),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(7),
-            child: InAppWebView(
-              initialUrlRequest: URLRequest(
-                url: WebUri(algoViewFullUrl),
-                // todo: auth???
-                // headers:
-              ),
-              onWebViewCreated: (controller) async {
-                _log.fine('onWebViewCreated');
-              },
-              onLoadStart: (controller, url) {
-                _log.fine('onLoadStart: $url');
-              },
-              onLoadStop: (controller, url) async {
-                _log.fine('onLoadStop: $url');
-              },
-              onProgressChanged: (controller, progress) {
-                _log.fine('onProgressChanged: $progress');
-              },
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
