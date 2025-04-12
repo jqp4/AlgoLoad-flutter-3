@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/features/algoview/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/features/auth/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/features/menu/presentation/ui/widgets/menu.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:code_text_field/code_text_field.dart';
 import 'package:file_picker/file_picker.dart';
@@ -136,8 +137,11 @@ class _AlgoViewMainPageState extends State<AlgoViewMainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const AppDrawerMenu(),
       appBar: AppBar(
-        title: const Text('AlgoLoad Flutter 3'),
+        title: const Text('AlgoLoad'),
+        centerTitle: false,
+        leading: const AppBarMenuButton(),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -145,7 +149,7 @@ class _AlgoViewMainPageState extends State<AlgoViewMainPage> {
           child: ConstrainedBox(
             constraints: const BoxConstraints(
               // maxWidth: MediaQuery.of(context).size.width * 0.7,
-              maxWidth: 1200,
+              maxWidth: 1100,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,7 +167,7 @@ class _AlgoViewMainPageState extends State<AlgoViewMainPage> {
                   Row(
                     children: [
                       Text(
-                        'Graph source code (editable)',
+                        'Graph source code',
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const Spacer(),
@@ -291,31 +295,6 @@ class _AlgoViewMainPageState extends State<AlgoViewMainPage> {
                     ),
                   ),
                 ],
-
-                Text(
-                  'tmp profile block:',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const Gap.y(16),
-
-                // todo: move to profile page
-                // Sign out (tmp)
-                UnconstrainedBox(
-                  child: MyButton(
-                    title: 'Logout',
-                    onPressed: () {
-                      AuthBloc().add(const AuthEvent.logout());
-                      Future.delayed(
-                        const Duration(milliseconds: 150),
-                        () {
-                          context.router
-                            ..popUntilRoot()
-                            ..replace(const LoginRoute());
-                        },
-                      );
-                    },
-                  ),
-                ),
                 const Gap.y(32),
               ],
             ),
