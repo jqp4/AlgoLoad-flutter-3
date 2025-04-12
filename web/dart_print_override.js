@@ -6,14 +6,14 @@ window.dartPrintEnabled = true;
 // Функция для перехвата print() из Dart
 window.dartPrint = function (message) {
     if (window.dartPrintEnabled && console.log) {
-        console.log("[DART]", message);
+        console.log("🚀 [DART]", message);
     }
 };
 
 // Функция для перехвата ошибок из Dart
 window.dartPrintError = function (message) {
     if (window.dartPrintEnabled && console.error) {
-        console.error("[DART ERROR]", message);
+        console.error("🚀 [DART ERROR]", message);
     }
 };
 
@@ -34,4 +34,4 @@ console.error = function () {
 };
 
 // Уведомление о загрузке скрипта
-console.log("[DART PRINT OVERRIDE] Initialized");
+console.log("🚀 [DART PRINT OVERRIDE] Initialized");

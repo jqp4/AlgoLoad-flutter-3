@@ -37,16 +37,10 @@ class NetworkDriver {
       (_dio.httpClientAdapter as BrowserHttpClientAdapter).withCredentials = true;
     }
 
-    _dio.interceptors.add(AuthInterceptor());
-    _dio.interceptors.add(InfoInterceptor());
+    // TODO: глобально разобраться с отключением авторизации.
+    // _dio.interceptors.add(AuthInterceptor());
 
-    // todo: remove
-    // dio.interceptors.add(InterceptorsWrapper(
-    //   onResponse: (response, handler) {
-    //     pprint('Response Headers: ${response.headers}');
-    //     return handler.next(response);
-    //   },
-    // ));
+    _dio.interceptors.add(InfoInterceptor());
   }
 
   Future<Response> get(String url) async {

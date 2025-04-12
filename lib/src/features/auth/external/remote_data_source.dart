@@ -41,8 +41,8 @@ final class AuthRemoteDataSourceImpl implements IAuthRemoteDataSource {
 
     // Извлекаем сессионный токен из заголовка set-cookie
     final responseCookies = response.headers['set-cookie'];
-    log.info('Response cookies: $responseCookies');
-    log.info('All headers: ${response.headers}');
+    // log.info('Response cookies: $responseCookies');
+    // log.info('All headers: ${response.headers}');
 
     // Проверяем наличие cookies в ответе
     if (responseCookies == null || responseCookies.isEmpty) {

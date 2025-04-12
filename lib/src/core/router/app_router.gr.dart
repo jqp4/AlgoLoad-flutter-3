@@ -10,116 +10,22 @@
 part of 'app_router.dart';
 
 /// generated route for
-/// [CreateNoteWithAudioFilePage]
-class CreateNoteWithAudioFileRoute
-    extends PageRouteInfo<CreateNoteWithAudioFileRouteArgs> {
-  CreateNoteWithAudioFileRoute({
-    required NotesBloc notesBloc,
-    Key? key,
-    List<PageRouteInfo>? children,
-  }) : super(
-          CreateNoteWithAudioFileRoute.name,
-          args: CreateNoteWithAudioFileRouteArgs(
-            notesBloc: notesBloc,
-            key: key,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'CreateNoteWithAudioFileRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      final args = data.argsAs<CreateNoteWithAudioFileRouteArgs>();
-      return CreateNoteWithAudioFilePage(
-        notesBloc: args.notesBloc,
-        key: args.key,
-      );
-    },
-  );
-}
-
-class CreateNoteWithAudioFileRouteArgs {
-  const CreateNoteWithAudioFileRouteArgs({
-    required this.notesBloc,
-    this.key,
-  });
-
-  final NotesBloc notesBloc;
-
-  final Key? key;
-
-  @override
-  String toString() {
-    return 'CreateNoteWithAudioFileRouteArgs{notesBloc: $notesBloc, key: $key}';
-  }
-}
-
-/// generated route for
-/// [CreateNoteWithAudioRecordPage]
-class CreateNoteWithAudioRecordRoute extends PageRouteInfo<void> {
-  const CreateNoteWithAudioRecordRoute({List<PageRouteInfo>? children})
+/// [AlgoViewMainPage]
+class AlgoViewMainRoute extends PageRouteInfo<void> {
+  const AlgoViewMainRoute({List<PageRouteInfo>? children})
       : super(
-          CreateNoteWithAudioRecordRoute.name,
+          AlgoViewMainRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'CreateNoteWithAudioRecordRoute';
+  static const String name = 'AlgoViewMainRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const CreateNoteWithAudioRecordPage();
+      return const AlgoViewMainPage();
     },
   );
-}
-
-/// generated route for
-/// [CreateNoteWithYoutubeMethodPage]
-class CreateNoteWithYoutubeMethodRoute
-    extends PageRouteInfo<CreateNoteWithYoutubeMethodRouteArgs> {
-  CreateNoteWithYoutubeMethodRoute({
-    required NotesBloc notesBloc,
-    Key? key,
-    List<PageRouteInfo>? children,
-  }) : super(
-          CreateNoteWithYoutubeMethodRoute.name,
-          args: CreateNoteWithYoutubeMethodRouteArgs(
-            notesBloc: notesBloc,
-            key: key,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'CreateNoteWithYoutubeMethodRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      final args = data.argsAs<CreateNoteWithYoutubeMethodRouteArgs>();
-      return CreateNoteWithYoutubeMethodPage(
-        notesBloc: args.notesBloc,
-        key: args.key,
-      );
-    },
-  );
-}
-
-class CreateNoteWithYoutubeMethodRouteArgs {
-  const CreateNoteWithYoutubeMethodRouteArgs({
-    required this.notesBloc,
-    this.key,
-  });
-
-  final NotesBloc notesBloc;
-
-  final Key? key;
-
-  @override
-  String toString() {
-    return 'CreateNoteWithYoutubeMethodRouteArgs{notesBloc: $notesBloc, key: $key}';
-  }
 }
 
 /// generated route for

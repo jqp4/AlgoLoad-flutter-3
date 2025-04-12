@@ -26,7 +26,7 @@ class LoginPage extends StatelessWidget {
             completed: () {
               context.router
                 ..popUntilRoot()
-                ..replace(const CreateNoteWithAudioRecordRoute());
+                ..replace(const AlgoViewMainRoute());
             },
           );
         },

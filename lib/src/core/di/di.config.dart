@@ -16,11 +16,13 @@ import '../../features/auth/domain/usecases/usecases.dart' as _i478;
 import '../../features/auth/external/remote_data_source.dart' as _i52;
 import '../../features/auth/infra/_barrel.dart' as _i264;
 import '../../features/auth/infra/repository/repository.dart' as _i383;
-import '../../features/notes/_barrel.dart' as _i204;
-import '../../features/notes/domain/usecases/usecases.dart' as _i308;
-import '../../features/notes/external/remote_data_source.dart' as _i231;
-import '../../features/notes/infra/_barrel.dart' as _i470;
-import '../../features/notes/infra/repository/repository.dart' as _i197;
+import '../../features/notes_deprecated/_barrel.dart' as _i723;
+import '../../features/notes_deprecated/domain/usecases/usecases.dart' as _i635;
+import '../../features/notes_deprecated/external/remote_data_source.dart'
+    as _i618;
+import '../../features/notes_deprecated/infra/_barrel.dart' as _i788;
+import '../../features/notes_deprecated/infra/repository/repository.dart'
+    as _i754;
 import '../bootstrap/bootstrap_service.dart' as _i739;
 import '../driver/network_driver.dart' as _i342;
 import '../services/app_version_service.dart' as _i212;
@@ -44,24 +46,24 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i492.LoadingOverlay>(() => _i492.LoadingOverlay());
     gh.lazySingleton<_i874.SecureStorageService>(
         () => _i874.SecureStorageService());
+    gh.singleton<_i788.INoteRemoteDataSource>(
+        () => const _i618.NoteRemoteDataSourceImpl());
     gh.singleton<_i264.IAuthRemoteDataSource>(
         () => const _i52.AuthRemoteDataSourceImpl());
-    gh.singleton<_i470.INoteRemoteDataSource>(
-        () => const _i231.NoteRemoteDataSourceImpl());
+    gh.singleton<_i723.INoteRepository>(
+        () => _i754.NoteRepositoryImpl(gh<_i723.INoteRemoteDataSource>()));
+    gh.singleton<_i635.SendAudioFileTask>(
+        () => _i635.SendAudioFileTask(gh<_i723.INoteRepository>()));
+    gh.singleton<_i635.SendYoutubeTask>(
+        () => _i635.SendYoutubeTask(gh<_i723.INoteRepository>()));
+    gh.singleton<_i635.FetchExpectedNote>(
+        () => _i635.FetchExpectedNote(gh<_i723.INoteRepository>()));
     gh.singleton<_i535.IAuthRepository>(
         () => _i383.AuthRepositoryImpl(gh<_i264.IAuthRemoteDataSource>()));
-    gh.singleton<_i204.INoteRepository>(
-        () => _i197.NoteRepositoryImpl(gh<_i204.INoteRemoteDataSource>()));
     gh.singleton<_i478.LoginUser>(
         () => _i478.LoginUser(gh<_i535.IAuthRepository>()));
     gh.singleton<_i478.LogoutUser>(
         () => _i478.LogoutUser(gh<_i535.IAuthRepository>()));
-    gh.singleton<_i308.SendAudioFileTask>(
-        () => _i308.SendAudioFileTask(gh<_i204.INoteRepository>()));
-    gh.singleton<_i308.SendYoutubeTask>(
-        () => _i308.SendYoutubeTask(gh<_i204.INoteRepository>()));
-    gh.singleton<_i308.FetchExpectedNote>(
-        () => _i308.FetchExpectedNote(gh<_i204.INoteRepository>()));
     return this;
   }
 }

@@ -8,15 +8,11 @@ part 'app_router.gr.dart';
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
-        // AutoRoute(page: OnboardingRoute.page, path: '/', initial: true),
-
         // AutoRoute(page: SettingsRoute.page, path: '/settings'),
+        // AutoRoute(page: OnboardingRoute.page, path: '/onboarding'),
+
         // AutoRoute(page: NotesListRoute.page, path: '/notesList'),
         // AutoRoute(page: SingleNoteRoute.page, path: '/note/:note'),
-
-        // AutoRoute(page: CreateNoteWithYoutubeMethodRoute.page, path: '/createNote/youtube/'),
-        // AutoRoute(page: CreateNoteWithAudioRecordRoute.page, path: '/createNote/audioRecord/'),
-        // AutoRoute(page: CreateNoteWithAudioFileRoute.page, path: '/createNote/audioFile/'),
 
         AutoRoute(
           page: LoginRoute.page,
@@ -25,7 +21,7 @@ class AppRouter extends RootStackRouter {
         ),
 
         AutoRoute(
-          page: CreateNoteWithAudioRecordRoute.page,
+          page: AlgoViewMainRoute.page,
           path: '/algoview/',
         ),
       ];
