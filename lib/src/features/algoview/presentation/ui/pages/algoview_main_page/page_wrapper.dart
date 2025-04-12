@@ -65,7 +65,7 @@ class _AlgoViewMainPageState extends State<AlgoViewMainPage> {
     });
   }
 
-  Future<UploadedConfigFileData> _uploadConfigFileFromComputer() async {
+  Future<UploadedConfigFileData?> _uploadConfigFileFromComputer() async {
     try {
       // Open file picker dialog
       final result = await FilePicker.platform.pickFiles(
@@ -91,8 +91,8 @@ class _AlgoViewMainPageState extends State<AlgoViewMainPage> {
           // For desktop/mobile platforms
           contents = await File(file.path!).readAsString();
         } else {
-          contents = 'null';
-          // return null;
+          // contents = 'null';
+          return null;
         }
 
         return UploadedConfigFileData(
@@ -100,11 +100,13 @@ class _AlgoViewMainPageState extends State<AlgoViewMainPage> {
           fileExtension: extension!,
         );
       }
-      // todo: remove
-      return const UploadedConfigFileData(
-        fileContents: 'null',
-        fileExtension: 'xml',
-      );
+      // // todo: remove
+      // return const UploadedConfigFileData(
+      //   fileContents: 'null',
+      //   fileExtension: 'xml',
+      // );
+
+      return null;
     } catch (e) {
       debugPrint('Error uploading file: $e');
       rethrow;
@@ -244,32 +246,26 @@ class _AlgoViewMainPageState extends State<AlgoViewMainPage> {
                   ),
                   const Gap.y(16),
                   Row(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       MyOutlinedButton(
                         title: 'Submit',
-                        onPressed: () async {
-                          await _uploadTask();
-                          await _receiveTask();
-                        },
+                        onPressed: _submitButtonCallback,
                       ),
                       const Gap.x(24),
                       MyOutlinedButton(
                         title: 'Upload file',
-                        onPressed: () async {
-                          final fileData = await _uploadConfigFileFromComputer();
-                          setState(() {
-                            _codeController.text = fileData.fileContents;
-                            _newTask = _newTask?.copyWith(
-                              graphSourceConfig: fileData.fileContents,
-                              graphSourceConfigType: _stringToGraphSourceConfigType(fileData.fileExtension),
-                            );
-                          });
-
-                          await _uploadTask();
-                          await _receiveTask();
-                        },
+                        onPressed: _uploadFileButtonCallback,
                       ),
+                      // const Gap.x(24),
+                      // MyOutlinedButton(
+                      //   title: 'Download solution',
+                      //   onPressed: () async {
+                      //     // todo:
+                      //     // 1. создать файл с именем и расшрением = 'solution.${_newTask?.graphSourceConfigType.name}'
+                      //     // 2. заполнить файл данными из _newTask?.graphSourceConfig
+                      //     // 3. сохранить его в загрузки браузера.
+                      //   },
+                      // ),
                     ],
                   ),
                   const Gap.y(32),
@@ -326,5 +322,27 @@ class _AlgoViewMainPageState extends State<AlgoViewMainPage> {
     //     },
     //   ),
     // );
+  }
+
+  Future<void> _uploadFileButtonCallback() async {
+    final fileData = await _uploadConfigFileFromComputer();
+
+    if (fileData == null || !mounted) return;
+
+    setState(() {
+      _codeController.text = fileData.fileContents;
+      _newTask = _newTask?.copyWith(
+        graphSourceConfig: fileData.fileContents,
+        graphSourceConfigType: _stringToGraphSourceConfigType(fileData.fileExtension),
+      );
+    });
+
+    await _uploadTask();
+    await _receiveTask();
+  }
+
+  Future<void> _submitButtonCallback() async {
+    await _uploadTask();
+    await _receiveTask();
   }
 }
