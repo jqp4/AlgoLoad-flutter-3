@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/features/algoview/_barrel.dart';
-import 'package:algoload_flutter_web_app/src/features/auth/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/features/menu/presentation/ui/widgets/menu.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:code_text_field/code_text_field.dart';
@@ -136,13 +135,8 @@ class _AlgoViewMainPageState extends State<AlgoViewMainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const AppDrawerMenu(),
-      appBar: AppBar(
-        title: const Text('AlgoLoad'),
-        centerTitle: false,
-        leading: const AppBarMenuButton(),
-      ),
+    return SideMenuScaffold(
+      title: 'AlgoLoad',
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: Center(

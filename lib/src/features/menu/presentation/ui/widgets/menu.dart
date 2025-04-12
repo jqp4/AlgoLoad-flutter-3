@@ -3,85 +3,168 @@ import 'package:algoload_flutter_web_app/src/features/auth/_barrel.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-class AppDrawerMenu extends StatelessWidget {
-  const AppDrawerMenu({
+class SideMenuScaffold extends StatefulWidget {
+  const SideMenuScaffold({
+    required this.title,
+    required this.body,
     super.key,
   });
 
+  final String title;
+  final Widget body;
+
+  @override
+  State<SideMenuScaffold> createState() => _SideMenuScaffoldState();
+}
+
+class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _animation;
+  static const double _menuWidth = 250.0;
+  bool _isMenuOpen = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _animation = Tween<double>(
+      begin: 0,
+      end: _menuWidth,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void toggleMenu() {
+    setState(() {
+      _isMenuOpen = !_isMenuOpen;
+      if (_isMenuOpen) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Меню с кнопками
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Menu',
-                      style: Theme.of(context).textTheme.headlineMedium,
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return Stack(
+          children: [
+            // Меню
+            SizedBox(
+              width: _menuWidth,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  border: Border(
+                    right: BorderSide(
+                      color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black,
+                      width: 1.0,
                     ),
-                    const Gap.y(32),
-                    AppDrawerMenuOptionButton(
-                      title: 'AlgoLoad',
-                      onPressed: () {
-                        Navigator.pop(context); // Закрываем меню
-                      },
+                  ),
+                ),
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Menu',
+                                style: Theme.of(context).textTheme.headlineMedium,
+                              ),
+                              const Gap.y(32),
+                              SideMenuOptionButton(
+                                title: 'AlgoLoad',
+                                onPressed: toggleMenu,
+                              ),
+                              const Gap.y(16),
+                              SideMenuOptionButton(
+                                title: 'Reports',
+                                onPressed: toggleMenu,
+                              ),
+                              const Gap.y(16),
+                              SideMenuOptionButton(
+                                title: 'Help',
+                                onPressed: toggleMenu,
+                              ),
+                              const Gap.y(16),
+                              SideMenuOptionButton(
+                                title: 'Old site',
+                                onPressed: toggleMenu,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SideMenuOptionButton(
+                          title: 'Logout',
+                          onPressed: () {
+                            toggleMenu();
+                            AuthBloc().add(const AuthEvent.logout());
+                            Future.delayed(
+                              const Duration(milliseconds: 450),
+                              () {
+                                context.router
+                                  ..popUntilRoot()
+                                  ..replace(const LoginRoute());
+                              },
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                    const Gap.y(16),
-                    AppDrawerMenuOptionButton(
-                      title: 'Reports',
-                      onPressed: () {
-                        Navigator.pop(context); // Закрываем меню
-                      },
-                    ),
-                    const Gap.y(16),
-                    AppDrawerMenuOptionButton(
-                      title: 'Help',
-                      onPressed: () {
-                        Navigator.pop(context); // Закрываем меню
-                      },
-                    ),
-                    const Gap.y(16),
-                    AppDrawerMenuOptionButton(
-                      title: 'Old site version',
-                      onPressed: () {
-                        Navigator.pop(context); // Закрываем меню
-                      },
-                    ),
-                  ],
+                  ),
                 ),
               ),
-              // Кнопка Logout внизу меню
-              AppDrawerMenuOptionButton(
-                title: 'Logout',
-                onPressed: () {
-                  AuthBloc().add(const AuthEvent.logout());
-                  Future.delayed(
-                    const Duration(milliseconds: 150),
-                    () {
-                      context.router
-                        ..popUntilRoot()
-                        ..replace(const LoginRoute());
-                    },
-                  );
-                },
-              ),
-            ],
+            ),
+            // Основной контент
+            Transform.translate(
+              offset: Offset(_animation.value, 0),
+              child: child,
+            ),
+          ],
+        );
+      },
+      child: GestureDetector(
+        onTap: () {
+          if (_isMenuOpen) {
+            toggleMenu();
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(widget.title),
+            centerTitle: false,
+            leading: AppBarSideMenuButton(
+              onPressed: toggleMenu,
+            ),
           ),
+          body: widget.body,
         ),
       ),
     );
   }
 }
 
-class AppDrawerMenuOptionButton extends StatelessWidget {
-  const AppDrawerMenuOptionButton({
+class SideMenuOptionButton extends StatelessWidget {
+  const SideMenuOptionButton({
     required this.title,
     required this.onPressed,
     super.key,
@@ -96,7 +179,7 @@ class AppDrawerMenuOptionButton extends StatelessWidget {
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(50)), // Полностью круглая граница
+          borderRadius: BorderRadius.all(Radius.circular(50)),
         ),
         side: BorderSide(
           color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black,
@@ -116,22 +199,23 @@ class AppDrawerMenuOptionButton extends StatelessWidget {
   }
 }
 
-class AppBarMenuButton extends StatelessWidget {
-  const AppBarMenuButton({
+class AppBarSideMenuButton extends StatelessWidget {
+  const AppBarSideMenuButton({
+    required this.onPressed,
     super.key,
   });
+
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: OutlinedButton(
-        onPressed: () {
-          Scaffold.of(context).openDrawer();
-        },
+        onPressed: onPressed,
         style: OutlinedButton.styleFrom(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8), // Закругленная граница с радиусом 8
+            borderRadius: BorderRadius.circular(8),
           ),
           side: BorderSide(
             color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black,
