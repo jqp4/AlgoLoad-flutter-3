@@ -42,6 +42,21 @@
         <script src="dart_print_override.js"></script>
     </head>
     <body>
+        <!-- Подключаем скрипт для поддержки url_launcher в веб-версии -->
+        <script src="url_launcher_web.js"></script>
+        <script>
+            // Регистрируем обработчик для url_launcher
+            window.flutterWebRenderer = "html";
+
+            // Регистрируем плагин url_launcher для веб
+            window.addEventListener("load", function () {
+                // Определяем функцию для открытия URL
+                window.openUrl = function (url) {
+                    window.open(url, "_blank");
+                    return true;
+                };
+            });
+        </script>
         <script src="flutter_bootstrap.js" async></script>
     </body>
 </html>

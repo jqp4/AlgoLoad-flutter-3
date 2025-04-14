@@ -1,3 +1,6 @@
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:js' as js;
+
 import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/features/auth/_barrel.dart';
 import 'package:auto_route/auto_route.dart';
@@ -22,8 +25,11 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
   late final AnimationController _controller;
   late final Animation<double> _slideAnimation;
   late Animation<double> _scaleAnimation;
-  static const double _menuWidth = 250.0;
   bool _isMenuOpen = false;
+
+  static const _menuWidth = 250.0;
+  static final _log = MyWebLogger('SideMenu');
+  static const _reportsUrl = 'https://algoload.parallel.ru/upload_report';
 
   @override
   void initState() {
@@ -59,7 +65,38 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
     super.dispose();
   }
 
-  void toggleMenu() {
+  Future<void> _openUrlWithLauncher(String url) async {
+    final Uri uri = Uri.parse(url);
+
+    try {
+      // Сначала пытаемся использовать плагин url_launcher
+      if (await launchUrl(uri, webOnlyWindowName: '_blank')) {
+        _log.info('launchUrl - OK');
+      } else {
+        _log.severe('launchUrl - FAIL');
+
+        // Если плагин не сработал, используем JavaScript
+        _openUrlWithJs(uri.toString());
+      }
+    } catch (e) {
+      _log.severe('launchUrl - ERROR: $e');
+
+      // В случае ошибки используем JavaScript
+      _openUrlWithJs(uri.toString());
+    }
+  }
+
+  // Запасной метод для открытия URL в веб-версии с использованием JavaScript
+  void _openUrlWithJs(String url) {
+    try {
+      js.context.callMethod('open', [url, '_blank']);
+      _log.info('_openUrlWithJs - OK');
+    } on Exception catch (e) {
+      _log.info('_openUrlWithJs - ERROR: $e');
+    }
+  }
+
+  void _toggleMenu() {
     setState(() {
       _isMenuOpen = !_isMenuOpen;
       if (_isMenuOpen) {
@@ -108,7 +145,7 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
                               MyOutlinedButton(
                                 title: 'AlgoLoad',
                                 onPressed: () {
-                                  toggleMenu();
+                                  _toggleMenu();
                                   context.router.replace(const AlgoViewMainRoute());
                                 },
                               ),
@@ -116,24 +153,16 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
                               MyOutlinedButton(
                                 title: 'Reports',
                                 onPressed: () async {
-                                  toggleMenu();
+                                  _toggleMenu();
 
-                                  final Uri url = Uri.parse('https://algoload.parallel.ru/upload_report');
-                                  if (!await launchUrl(url, webOnlyWindowName: '_blank')) {
-                                    // Показываем сообщение об ошибке, если не удалось открыть ссылку
-                                    if (context.mounted) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text('Не удалось открыть $url')),
-                                      );
-                                    }
-                                  }
+                                  _openUrlWithLauncher(_reportsUrl);
                                 },
                               ),
                               const Gap.y(16),
                               MyOutlinedButton(
                                 title: 'Help',
                                 onPressed: () {
-                                  toggleMenu();
+                                  _toggleMenu();
                                   // todo: replace to help page
                                   context.router.replace(const AlgoViewMainRoute());
                                 },
@@ -144,7 +173,7 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
                         MyOutlinedButton(
                           title: 'Logout',
                           onPressed: () {
-                            toggleMenu();
+                            _toggleMenu();
                             AuthBloc().add(const AuthEvent.logout());
                             Future.delayed(
                               const Duration(milliseconds: 450),
@@ -176,7 +205,7 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
       child: GestureDetector(
         onTap: () {
           if (_isMenuOpen) {
-            toggleMenu();
+            _toggleMenu();
           }
         },
         child: Scaffold(
@@ -184,7 +213,7 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
             title: Text(widget.title),
             centerTitle: false,
             leading: AppBarSideMenuButton(
-              onPressed: toggleMenu,
+              onPressed: _toggleMenu,
             ),
           ),
           body: widget.body,
