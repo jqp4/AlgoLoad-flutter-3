@@ -61,9 +61,6 @@ class _LoginFormPageState extends State<LoginFormPage> {
         },
         child: Scaffold(
           backgroundColor: backgroundColor,
-          // appBar: AppBar(
-          //   title: const Text('AlgoLoad Flutter 3'),
-          // ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Center(

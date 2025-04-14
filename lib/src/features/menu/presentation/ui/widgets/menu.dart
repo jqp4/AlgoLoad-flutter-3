@@ -2,6 +2,7 @@ import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/features/auth/_barrel.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SideMenuScaffold extends StatefulWidget {
   const SideMenuScaffold({
@@ -114,10 +115,18 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
                               const Gap.y(16),
                               MyOutlinedButton(
                                 title: 'Reports',
-                                onPressed: () {
+                                onPressed: () async {
                                   toggleMenu();
-                                  // todo: replace to reports page
-                                  context.router.replace(const AlgoViewMainRoute());
+
+                                  final Uri url = Uri.parse('https://algoload.parallel.ru/upload_report');
+                                  if (!await launchUrl(url, webOnlyWindowName: '_blank')) {
+                                    // Показываем сообщение об ошибке, если не удалось открыть ссылку
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text('Не удалось открыть $url')),
+                                      );
+                                    }
+                                  }
                                 },
                               ),
                               const Gap.y(16),
@@ -129,18 +138,6 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
                                   context.router.replace(const AlgoViewMainRoute());
                                 },
                               ),
-                              // проблемы с библиотекой url_launcher
-                              // const Gap.y(16),
-                              // SideMenuOptionButton(
-                              //   title: 'Old site',
-                              //   onPressed: () async {
-                              //     toggleMenu();
-                              //     final Uri url = Uri.parse('https://algoload.parallel.ru');
-                              //     if (await canLaunchUrl(url)) {
-                              //       await launchUrl(url, mode: LaunchMode.externalApplication);
-                              //     }
-                              //   },
-                              // ),
                             ],
                           ),
                         ),
