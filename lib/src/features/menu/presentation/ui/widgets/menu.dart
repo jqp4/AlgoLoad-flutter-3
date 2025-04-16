@@ -30,6 +30,7 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
   static const _menuWidth = 250.0;
   static final _log = MyWebLogger('SideMenu');
   static const _reportsUrl = 'https://algoload.parallel.ru/upload_report';
+  static const _adminPanelUrl = 'https://algoload.parallel.ru/admin';
 
   @override
   void initState() {
@@ -71,15 +72,15 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
     try {
       // Сначала пытаемся использовать плагин url_launcher
       if (await launchUrl(uri, webOnlyWindowName: '_blank')) {
-        _log.info('launchUrl - OK');
+        _log.fine('_openUrlWithLauncher - OK');
       } else {
-        _log.severe('launchUrl - FAIL');
+        _log.severe('_openUrlWithLauncher - FAIL');
 
         // Если плагин не сработал, используем JavaScript
         _openUrlWithJs(uri.toString());
       }
-    } catch (e) {
-      _log.severe('launchUrl - ERROR: $e');
+    } on Exception catch (e) {
+      _log.severe('_openUrlWithLauncher - ERROR: $e');
 
       // В случае ошибки используем JavaScript
       _openUrlWithJs(uri.toString());
@@ -90,9 +91,9 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
   void _openUrlWithJs(String url) {
     try {
       js.context.callMethod('open', [url, '_blank']);
-      _log.info('_openUrlWithJs - OK');
+      _log.fine('_openUrlWithJs - OK');
     } on Exception catch (e) {
-      _log.info('_openUrlWithJs - ERROR: $e');
+      _log.severe('_openUrlWithJs - ERROR: $e');
     }
   }
 
@@ -109,104 +110,122 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: Listenable.merge([_slideAnimation, _scaleAnimation]),
-      builder: (context, child) {
-        return Stack(
-          children: [
-            // Меню
-            SizedBox(
-              width: _menuWidth,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  border: Border(
-                    right: BorderSide(
-                      color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black,
-                      width: 1.0,
-                    ),
-                  ),
-                ),
-                child: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Menu',
-                                style: Theme.of(context).textTheme.headlineMedium,
-                              ),
-                              const Gap.y(32),
-                              MyOutlinedButton(
-                                title: 'AlgoLoad',
-                                onPressed: () {
-                                  _toggleMenu();
-                                  context.router.replace(const AlgoViewMainRoute());
-                                },
-                              ),
-                              const Gap.y(16),
-                              MyOutlinedButton(
-                                title: 'Reports',
-                                onPressed: () async {
-                                  _toggleMenu();
-
-                                  _openUrlWithLauncher(_reportsUrl);
-                                },
-                              ),
-                              const Gap.y(16),
-                              MyOutlinedButton(
-                                title: 'Help',
-                                onPressed: () {
-                                  _toggleMenu();
-                                  // todo: replace to help page
-                                  context.router.replace(const AlgoViewMainRoute());
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                        MyOutlinedButton(
-                          title: 'Logout',
-                          onPressed: () {
-                            _toggleMenu();
-                            AuthBloc().add(const AuthEvent.logout());
-                            Future.delayed(
-                              const Duration(milliseconds: 450),
-                              () {
-                                context.router
-                                  ..popUntilRoot()
-                                  ..replace(const LoginRoute());
-                              },
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            // Основной контент
-            Transform.translate(
-              offset: Offset(_slideAnimation.value, 0),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width - _slideAnimation.value,
-                child: child,
-              ),
-            ),
-          ],
-        );
+    return GestureDetector(
+      onTap: () {
+        if (!_isMenuOpen) return;
+        _toggleMenu();
       },
-      child: GestureDetector(
-        onTap: () {
-          if (_isMenuOpen) {
-            _toggleMenu();
-          }
+      child: AnimatedBuilder(
+        animation: Listenable.merge([_slideAnimation, _scaleAnimation]),
+        builder: (context, child) {
+          return Stack(
+            children: [
+              // Меню
+              SizedBox(
+                width: _menuWidth,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    border: Border(
+                      right: BorderSide(
+                        color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black,
+                        width: 1.0,
+                      ),
+                    ),
+                  ),
+                  child: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Menu',
+                                  style: Theme.of(context).textTheme.headlineMedium,
+                                ),
+                                const Gap.y(32),
+                                MyOutlinedButton(
+                                  title: 'AlgoLoad',
+                                  onPressed: () {
+                                    _toggleMenu();
+                                    context.router.replace(const AlgoViewMainRoute());
+                                  },
+                                ),
+                                const Gap.y(16),
+                                MyOutlinedButton(
+                                  title: 'Reports',
+                                  onPressed: () async {
+                                    _toggleMenu();
+                                    await _openUrlWithLauncher(_reportsUrl);
+                                  },
+                                ),
+                                // todo:
+                                const Gap.y(16),
+                                MyOutlinedButton(
+                                  title: 'Your task',
+                                  onPressed: () async {
+                                    _toggleMenu();
+                                    // todo: replace url
+                                    // await _openUrlWithLauncher(_reportsUrl);
+                                  },
+                                ),
+
+                                // todo:
+                                // const Gap.y(16),
+                                // MyOutlinedButton(
+                                //   title: 'Help',
+                                //   onPressed: () {
+                                //     _toggleMenu();
+                                //     // todo: replace to help page
+                                //     context.router.replace(const AlgoViewMainRoute());
+                                //   },
+                                // ),
+                              ],
+                            ),
+                          ),
+                          MyOutlinedButton(
+                            title: 'Admin panel',
+                            onPressed: () async {
+                              _toggleMenu();
+                              await _openUrlWithLauncher(_adminPanelUrl);
+                            },
+                          ),
+                          const Gap.y(16),
+                          MyOutlinedButton(
+                            title: 'Logout',
+                            onPressed: () {
+                              _toggleMenu();
+                              AuthBloc().add(const AuthEvent.logout());
+                              Future.delayed(
+                                const Duration(milliseconds: 450),
+                                () {
+                                  context.router
+                                    ..popUntilRoot()
+                                    ..replace(const LoginRoute());
+                                },
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              // Основной контент
+              Transform.translate(
+                offset: Offset(_slideAnimation.value, 0),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width - _slideAnimation.value,
+                  child: child,
+                ),
+              ),
+            ],
+          );
         },
         child: Scaffold(
           appBar: AppBar(
