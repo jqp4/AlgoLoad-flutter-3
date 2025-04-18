@@ -1,6 +1,3 @@
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
-
 import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/features/auth/domain/entities/login_form.dart';
 import 'package:algoload_flutter_web_app/src/features/auth/infra/_barrel.dart';
@@ -39,50 +36,54 @@ final class AuthRemoteDataSourceImpl implements IAuthRemoteDataSource {
     final msg = 'Response: $logData';
     log.finest(msg);
 
-    // Извлекаем сессионный токен из заголовка set-cookie
-    final responseCookies = response.headers['set-cookie'];
-    // log.info('Response cookies: $responseCookies');
-    // log.info('All headers: ${response.headers}');
+    return 'null';
 
-    // Проверяем наличие cookies в ответе
-    if (responseCookies == null || responseCookies.isEmpty) {
-      // Если авторизация успешна, но токен отсутствует в заголовке,
-      // это может быть связано с блокировкой SameSite=Lax
-      // Попробуем извлечь информацию о сессии из тела ответа
-      if (rawData is Map && rawData.containsKey('result') && rawData['result'] == 'Authorized successfully') {
-        // Создаем фиктивный токен, который будет использоваться для последующих запросов
-        // AuthInterceptor будет использовать этот токен для установки Cookie заголовка
-        const sessionToken = 'session=authorized_session';
-        log.info('Created placeholder session token: $sessionToken');
-        return sessionToken;
-      }
+    // todo: In the current version, authorization no longer explicitly uses the session token.
 
-      final errMsg = 'Session token is null. Response: $logData. Headers: ${response.headers}';
-      log.severe(errMsg);
+    // // Извлекаем сессионный токен из заголовка set-cookie
+    // final responseCookies = response.headers['set-cookie'];
+    // // log.info('Response cookies: $responseCookies');
+    // // log.info('All headers: ${response.headers}');
 
-      // todo: ???
-      // throw ServerException(description: errMsg);
-      return 'null';
-    }
+    // // Проверяем наличие cookies в ответе
+    // if (responseCookies == null || responseCookies.isEmpty) {
+    //   // Если авторизация успешна, но токен отсутствует в заголовке,
+    //   // это может быть связано с блокировкой SameSite=Lax
+    //   // Попробуем извлечь информацию о сессии из тела ответа
+    //   if (rawData is Map && rawData.containsKey('result') && rawData['result'] == 'Authorized successfully') {
+    //     // Создаем фиктивный токен, который будет использоваться для последующих запросов
+    //     // AuthInterceptor будет использовать этот токен для установки Cookie заголовка
+    //     const sessionToken = 'session=authorized_session';
+    //     log.info('Created placeholder session token: $sessionToken');
+    //     return sessionToken;
+    //   }
 
-    // Извлекаем полный токен сессии из заголовка
-    final fullSessionCookie = responseCookies[0];
-    log.info('Full session cookie: $fullSessionCookie');
+    //   final errMsg = 'Session token is null. Response: $logData. Headers: ${response.headers}';
+    //   log.severe(errMsg);
 
-    // Извлекаем только часть session=value без атрибутов
-    final maybeSessionToken = fullSessionCookie.split(';')[0];
+    //   // todo: ???
+    //   // throw ServerException(description: errMsg);
+    //   return 'null';
+    // }
 
-    if (maybeSessionToken.isEmpty) {
-      final errMsg = 'Session token is empty. Response: $logData. Headers: ${response.headers}';
-      log.severe(errMsg);
+    // // Извлекаем полный токен сессии из заголовка
+    // final fullSessionCookie = responseCookies[0];
+    // log.info('Full session cookie: $fullSessionCookie');
 
-      // todo: ???
-      // throw ServerException(description: errMsg);
-      return 'null';
-    }
+    // // Извлекаем только часть session=value без атрибутов
+    // final maybeSessionToken = fullSessionCookie.split(';')[0];
 
-    log.finest('Session token: $maybeSessionToken');
-    return maybeSessionToken;
+    // if (maybeSessionToken.isEmpty) {
+    //   final errMsg = 'Session token is empty. Response: $logData. Headers: ${response.headers}';
+    //   log.severe(errMsg);
+
+    //   // todo: ???
+    //   // throw ServerException(description: errMsg);
+    //   return 'null';
+    // }
+
+    // log.finest('Session token: $maybeSessionToken');
+    // return maybeSessionToken;
   }
 
   @override
