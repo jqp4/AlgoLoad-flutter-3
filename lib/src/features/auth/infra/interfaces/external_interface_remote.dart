@@ -10,4 +10,6 @@ abstract interface class IAuthRemoteDataSource {
 
   @Deprecated('In the current version, authorization no longer explicitly uses the session token.')
   Future<void> deleteSessionToken();
+
+  Future<String> getUserName();
 }

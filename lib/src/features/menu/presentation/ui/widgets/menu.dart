@@ -3,6 +3,7 @@ import 'dart:js' as js;
 
 import 'package:algoload_flutter_web_app/src/core/_barrel.dart';
 import 'package:algoload_flutter_web_app/src/features/auth/_barrel.dart';
+import 'package:algoload_flutter_web_app/src/foundation/_barrel.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -26,6 +27,7 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
   late final Animation<double> _slideAnimation;
   late Animation<double> _scaleAnimation;
   bool _isMenuOpen = false;
+  String? _username;
 
   static const _menuWidth = 250.0;
   static final _log = MyWebLogger('SideMenu');
@@ -46,6 +48,8 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
       parent: _controller,
       curve: Curves.easeInOut,
     ));
+
+    _requestUserName();
   }
 
   @override
@@ -64,6 +68,22 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  Future<void> _requestUserName() async {
+    final result = await inject<GetUserName>()();
+
+    if (result.isLeft()) {
+      _log.severe('Failure to obtain a usernamee: ${result.asLeft().description}');
+      return;
+    }
+
+    _username = result.asRight();
+
+    _log.finest('_username = $_username');
+
+    if (!mounted) return;
+    setState(() {});
   }
 
   Future<void> _openUrlWithLauncher(String url) async {
@@ -157,20 +177,21 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
                                 ),
                                 const Gap.y(16),
                                 MyOutlinedButton(
+                                  title: 'Download task',
+                                  onPressed: () async {
+                                    _toggleMenu();
+
+                                    // todo: replace root
+                                    final url = 'https://algoload.parallel.ru/user/$_username/task';
+                                    await _openUrlWithLauncher(url);
+                                  },
+                                ),
+                                const Gap.y(16),
+                                MyOutlinedButton(
                                   title: 'Reports',
                                   onPressed: () async {
                                     _toggleMenu();
                                     await _openUrlWithLauncher(_reportsUrl);
-                                  },
-                                ),
-                                // todo:
-                                const Gap.y(16),
-                                MyOutlinedButton(
-                                  title: 'Your task',
-                                  onPressed: () async {
-                                    _toggleMenu();
-                                    // todo: replace url
-                                    // await _openUrlWithLauncher(_reportsUrl);
                                   },
                                 ),
 
@@ -229,7 +250,27 @@ class _SideMenuScaffoldState extends State<SideMenuScaffold> with SingleTickerPr
         },
         child: Scaffold(
           appBar: AppBar(
-            title: Text(widget.title),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(widget.title),
+                if (_username != null)
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Username:',
+                        style: context.theme.textTheme.bodyMedium,
+                      ),
+                      Text(
+                        _username!,
+                        style: context.theme.textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
+              ],
+            ),
             centerTitle: false,
             leading: AppBarSideMenuButton(
               onPressed: _toggleMenu,

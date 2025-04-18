@@ -39,3 +39,15 @@ class LogoutUser extends AuthUseCasePrototype {
     return const Right(null);
   }
 }
+
+@singleton
+class GetUserName extends AuthUseCasePrototype {
+  const GetUserName(super.authRepository);
+
+  Future<Either<Failure, String?>> call() async {
+    final maybeUserName = await authRepository.getUserName();
+    if (maybeUserName.isLeft()) return maybeUserName;
+
+    return maybeUserName;
+  }
+}

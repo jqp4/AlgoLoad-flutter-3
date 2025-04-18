@@ -179,4 +179,33 @@ final class AuthRemoteDataSourceImpl implements IAuthRemoteDataSource {
       SecureStorageConstants.accessTokenKey,
     );
   }
+
+  @override
+  Future<String> getUserName() async {
+    final log = MyWebLogger('AuthRemoteDataSourceImpl.getUserName');
+    final client = inject<NetworkDriver>();
+    const fineStatusCodes = [200];
+
+    final response = await client.get('/api/username');
+
+    final rawData = response.data;
+    final logData = '(${response.statusCode}): <${rawData.runtimeType}>$rawData';
+
+    if (!fineStatusCodes.contains(response.statusCode)) {
+      final errMsg = 'ServerException: $logData';
+      log.severe(errMsg);
+      throw ServerException(description: errMsg);
+    }
+
+    final msg = 'Response: $logData';
+    log.finest(msg);
+
+    if (rawData is Map && rawData.containsKey('result')) {
+      return rawData['result'].toString();
+    } else {
+      final errMsg = 'Username not found in response: $logData';
+      log.severe(errMsg);
+      throw ServerException(description: errMsg);
+    }
+  }
 }

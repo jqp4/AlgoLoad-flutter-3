@@ -75,6 +75,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i478.LoginUser(gh<_i535.IAuthRepository>()));
     gh.singleton<_i478.LogoutUser>(
         () => _i478.LogoutUser(gh<_i535.IAuthRepository>()));
+    gh.singleton<_i478.GetUserName>(
+        () => _i478.GetUserName(gh<_i535.IAuthRepository>()));
     return this;
   }
 }
