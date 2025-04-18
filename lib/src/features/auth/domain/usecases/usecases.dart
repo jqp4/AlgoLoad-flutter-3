@@ -18,8 +18,8 @@ class LoginUser extends AuthUseCasePrototype {
     final maybeSessionToken = await authRepository.loginUser(form);
     if (maybeSessionToken.isLeft()) return maybeSessionToken;
 
-    final maybeStored = await authRepository.storeSessionToken(maybeSessionToken.asRight());
-    if (maybeStored.isLeft()) return maybeStored;
+    // final maybeStored = await authRepository.storeSessionToken(maybeSessionToken.asRight());
+    // if (maybeStored.isLeft()) return maybeStored;
 
     return const Right(null);
   }
@@ -33,8 +33,8 @@ class LogoutUser extends AuthUseCasePrototype {
     final maybeLogouted = await authRepository.logoutUser();
     if (maybeLogouted.isLeft()) return maybeLogouted;
 
-    final maybeDeleted = await authRepository.deleteSessionToken();
-    if (maybeDeleted.isLeft()) return maybeDeleted;
+    // final maybeDeleted = await authRepository.deleteSessionToken();
+    // if (maybeDeleted.isLeft()) return maybeDeleted;
 
     return const Right(null);
   }

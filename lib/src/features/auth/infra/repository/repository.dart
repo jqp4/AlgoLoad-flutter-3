@@ -41,6 +41,12 @@ class AuthRepositoryImpl implements IAuthRepository {
     });
   }
 
+  @override
+  Future<Either<Failure, String>> getUserName() {
+    // TODO: implement getUserName
+    throw UnimplementedError();
+  }
+
   // Helper
   Future<Either<Failure, T>> _safetyRequest<T>(Future<T> Function() request) async {
     try {

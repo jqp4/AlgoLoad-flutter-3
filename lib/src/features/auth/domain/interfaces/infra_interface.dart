@@ -7,7 +7,11 @@ abstract interface class IAuthRepository {
 
   Future<Either<Failure, void>> logoutUser();
 
+  @Deprecated('In the current version, authorization no longer explicitly uses the session token.')
   Future<Either<Failure, void>> storeSessionToken(String sessionToken);
 
+  @Deprecated('In the current version, authorization no longer explicitly uses the session token.')
   Future<Either<Failure, void>> deleteSessionToken();
+
+  Future<Either<Failure, String>> getUserName();
 }
